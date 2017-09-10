@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rathi</title>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/ractive"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <script type="text/javascript" src="/js/bootstrap.js"></script>
+    <!-- Just to make our placeholder images work. Don't actually copy the next line! -->
+    <script type="text/javascript" src="/js/holder.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="/css/bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="/css/carousel.css">
+    <link rel="stylesheet" type="text/css" href="style.css">
+</head>
+
+<body>
+    <div id="target"></div>
+    <script id="template" type="text/ractive">
+        <ux-fav-item-carousel></ux-fav-item-carousel>
+    </script>
+    <script id="ux-fav-item-carousel" type="text/ractive">
+        <div id="myCarousel" class="carousel slide" data-ride="carousel">
+            <ol class="carousel-indicators">
+                {{#each carouselItems: i}}
+                <li data-target="#myCarousel" data-slide-to="{{i}}" class="{{#if i==0 }} active{{/if}}"></li>
+                {{/each}}
+            </ol>
+            <div class="carousel-inner" role="listbox">
+                {{#each carouselItems : i}}
+                <div class="item {{#if i==0 }} active{{/if}}">
+                    <div class="row">
+                        {{#each items}}
+                        <div class="col-sm-4 col-md-3">
+                            <div class="thumbnail">
+                                <div class="caption">
+                                    <img src="{{icon_img}}" alt="image removed">
+                                    <h3>{{name}}</h3>
+                                    <p>{{description}}</p>
+                                    <p><a href="#" class="btn btn-primary" role="button">Buy Now</a></p>
+                                </div>
+                            </div>
+                        </div>
+                        {{/each}}
+                    </div>
+                </div>
+                {{/each}}
+            </div>
+            <a class="left carousel-control" href="#myCarousel" role="button" data-slide="prev">
+        <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
+        <span class="sr-only">Previous</span>
+      </a>
+            <a class="right carousel-control" href="#myCarousel" role="button" data-slide="next">
+        <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+        <span class="sr-only">Next</span>
+      </a>
+        </div>
+    </script>
+    <script type="text/javascript">
+    Ractive.components["ux-fav-item-carousel"] = Ractive.extend({
+        template: "#ux-fav-item-carousel",
+        isolate: true,
+        data: {
+            carouselItems: []
+        },
+        oninit: function() {
+            var self = this;
+            $.ajax({
+                url: "/slider/fav",
+                success: function(result, model) {
+                    var carouselItems = [];
+                    var iteration = parseInt(result.length / 4) + 1;
+                    var i = 0,
+                        step = 0;
+                    while (step < iteration) {
+                        var items = [];
+                        items.push(result[i]);
+                        result[i + 1] ? items.push(result[i + 1]) : null;
+                        result[i + 2] ? items.push(result[i + 2]) : null;
+                        result[i + 3] ? items.push(result[i + 3]) : null;
+                        i = i + 4;
+                        carouselItems.push({ items: items, index: step });
+                        step++;
+                    }
+                    self.set('carouselItems', carouselItems);
+                },
+                error: function(response) {
+                    self.detach();
+                    var error = response.responseJSON;
+                    self.setAlertData(error.message + error.description, 'danger');
+                }
+            });
+        },
+
+        onrender: function() {
+            console.log('ux-fav-item-carousel render');
+        },
+        onconfig: function() {
+            console.log('ux-fav-item-carousel config');
+        }
+    });
+    Ractive({
+        target: '#target',
+        template: '#template',
+        data: {},
+        on: {
+
+        }
+    });
+    </script>
+</body>
+
+</html>

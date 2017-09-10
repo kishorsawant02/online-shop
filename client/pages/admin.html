@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>Rathi</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="format-detection" content="telephone=no">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+</head>
+<body>
+    <div id="target"></div>
+    <script id="template" type="text/ractive">
+        <h2>Country profile</h2>
+        <p>{{country.name}} is a {{country.climate.temperature}} country with {{country.climate.rainfall}} rainfall and a population of {{country.population}}.</p>
+        {{#each country.climate}}
+        <accordion name="{{.}}"></accordion>
+        {{/each}}
+    </script>
+    <script id="accordion" type="text/ractive">
+        <div>{{name.temperature}}</div>
+    </script>
+    <script type="text/javascript">
+    $(window).load(function() {
+     // executes when complete page is fully loaded, including all frames, objects and images
+     alert("window is loaded");
+        var ractive = Ractive({
+            target: '#target',
+            template: '#template',
+            data: {
+                country: {
+                    name: 'The UK',
+                    climate: [{ temperature: 'hot', rainfall: 'fdsgfdsg' }, { temperature: 'chillsed', rainfall: 'dsfdsdf' }, { temperature: 'cold', rainfall: 'excessive' }],
+                    population: 63230000,
+                    capital: { name: 'London', lat: 51.5171, lon: -0.1062 }
+                }
+            }
+        });
+    });
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rathi</title>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/ractive"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <script type="text/javascript" src="/js/bootstrap.js"></script>
+    <!-- Just to make our placeholder images work. Don't actually copy the next line! -->
+    <script type="text/javascript" src="/js/holder.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="/css/bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="style.css">
+</head>
+
+<body>
+    <div id="target"></div>
+    <script id="template" type="text/ractive">
+        <div class="row form-group">
+            <div class="col-md-4 col-md-offset-4">
+                <div class="input-group">
+                    <input minlength="4" maxlength="20" name="name" placeholder="Enter Product Name" class="form-control input-md" type="text" value="{{product.name}}" required>
+                </div>
+            </div>
+        </div>
+        <div class="row form-group">
+            <div class="col-md-4 col-md-offset-4">
+                <div class="input-group">
+                    <input minlength="4" maxlength="25" name="price" placeholder="Enter Price" class="form-control input-md" type="number" value="{{product.price}}" required>
+                </div>
+            </div>
+        </div>
+        <div class="row form-group">
+            <div class="col-md-4 col-md-offset-4">
+                <div class="input-group">
+                    <input minlength="4" maxlength="25" name="discount amount" placeholder="Enter discount amount" class="form-control input-md" type="number" value="{{product.discount}}" required>
+                </div>
+            </div>
+        </div>
+        <div class="row form-group">
+            <div class="col-md-4 col-md-offset-4">
+                <div class="input-group">
+                    <textarea name="description" value="{{product.description}}" class="form-control" rows="8" cols="80" placeholder="Write description"></textarea>
+                </div>
+            </div>
+        </div>
+        <div class="row form-group">
+            <div class="col-md-4 col-md-offset-4">
+                <div class="input-group">
+                    <input type="url" placeholder="icon_img" value="{{product.icon_img}}" class="form-control input-md" name="icon_img" required>
+                </div>
+            </div>
+        </div>
+        <div class="row form-group">
+            <div class="col-md-4 col-md-offset-4">
+                <div class="input-group">
+                    <ux-select options="{{material}}" selected_value="{{product.material}}" />
+                </div>
+            </div>
+        </div>
+        <div class="row form-group">
+            <div class="col-md-4 col-md-offset-4">
+                <div class="input-group">
+                    <ux-select options="{{category}}" selected_value="{{product.category}}" />
+                </div>
+            </div>
+        </div>
+        <div class="row form-group">
+            <div class="col-md-4 col-md-offset-4">
+                <div class="input-group">
+                    <span>Add Specification</span>
+                    <span><button type="button" on-click="addSpecification" class="btn btn-primary">+</button></span>
+                </div>
+            </div>
+            <ux-specification-box specification="{{product.specification}}" />
+        </div>
+        <div class="row form-group">
+            <div class="col-md-4 col-md-offset-4">
+                <div class="input-group">
+                    <span> Add Images</span><span>
+                    <button type="button" on-click="addImages" class="btn btn-primary">+</button></span>
+                </div>
+            </div>
+            <ux-image-url-box images="{{product.images}}" />
+        </div>
+        <div class="col-md-4 col-md-offset-4">
+            <button type="button" on-click="saveProduct" class="btn btn-primary">Submit</button>
+            <button type="button" class="btn btn-primary pull-right" data-toggle="modal" data-target="#myModal">Preview</button>
+        </div>
+        <ux-alert data="{{alertData}}"></ux-alert>
+        <div id="myModal" class="modal fade" role="dialog">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title">Preview Product Details</h4>
+                    </div>
+                    <div class="modal-body">
+                        {{#each product:i}}
+                        <div><span>{{@key}}</span><span>{{JSON.stringify(.)}}</span></div>
+                        {{/each}}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </script>
+    <script id="ux-select" type="text/ractive">
+        <select value="{{selected_value}}" on-change="onChange">
+            {{#each options:i}}
+            <option value="{{value}}" selected="{{selected}}">
+                {{text}}
+            </option>
+            {{/each}}
+        </select>
+    </script>
+    <script id="ux-alert" type="text/ractive">
+        <div class="container">
+            <!-- type = success, info, warning, danger-->
+            {{#data}}
+            <div class="alert alert-{{type}}" role="alert">{{msg}}</div>
+            {{/}}
+        </div>
+    </script>
+    <script id="ux-specification-box" type="text/ractive">
+        {{#each specification :index}}
+        <div class="row form-ghroup">
+            <div class="col-md-4 col-md-offset-4">
+                <div class="input-group">
+                    <span> <input minlength="4" maxlength="100" placeholder="Enter Key Name" class="input-md" type="text" value="{{key}}"></span>
+                    <span><input minlength="4" maxlength="100" placeholder="Enter Value" class="input-md" type="text" value="{{value}}"></span>
+                    <span><button type="button" on-click="removeSpecification" index="{{index}}" class="btn btn-primary">-</button></span>
+                </div>
+            </div>
+        </div>
+        {{/each}}
+    </script>
+    <script id="ux-image-url-box" type="text/ractive">
+        {{#each images:index}}
+        <div class="row form-group">
+            <div class="col-md-4 col-md-offset-4">
+                <div class="input-group">
+                    <span><input minlength="4" maxlength="100" placeholder="Enter Image Url" class="input-md" type="text" value="{{url}}"></span>
+                    <span><button type="button" on-click="removeImage" index="{{index}}" class="btn btn-primary">-</button></span>
+                </div>
+            </div>
+        </div>
+        {{/each}}
+    </script>
+    <script type="text/javascript">
+    Ractive.components["ux-image-url-box"] = Ractive.extend({
+        template: "#ux-image-url-box",
+        isolate: true,
+        oninit: function() {
+            console.log('ux-image-url-box init');
+        },
+        onrender: function() {
+            console.log('ux-image-url-box render');
+        },
+        onconfig: function() {
+            console.log('ux-image-url-box config');
+            this.on('onChange', function(event) {
+                console.log('on change Action');
+            });
+        },
+        on: {
+            removeImage: function(event) {
+                var index = event.get('index');
+                var images = this.get('images');
+                images.splice(index, 1);
+                this.set('images', images);
+            }
+        }
+    });
+    Ractive.components["ux-specification-box"] = Ractive.extend({
+        template: "#ux-specification-box",
+        isolate: true,
+        oninit: function() {
+            console.log('ux-specification-box init');
+        },
+        onrender: function() {
+            console.log('ux-specification-box render');
+        },
+        onconfig: function() {
+            console.log('ux-specification-box config');
+            this.on('onChange', function(event) {
+                console.log('on change Action');
+            });
+        },
+        on: {
+            removeSpecification: function(event) {
+                var index = event.get('index');
+                var specification = this.get('specification');
+                specification.splice(index, 1);
+                this.set('specification', specification);
+            }
+        }
+    });
+    Ractive.components["ux-alert"] = Ractive.extend({
+        template: "#ux-alert",
+        oninit: function() {
+            console.log('ux-alert init');
+        },
+        onrender: function() {
+            console.log('ux-alert render');
+        },
+        onconfig: function() {
+            console.log('ux-alert config');
+            this.on('onChange', function(event) {
+                console.log('on change Action');
+            });
+        }
+    });
+    Ractive.components["ux-select"] = Ractive.extend({
+        template: "#ux-select",
+        oninit: function() {
+            console.log('ux-select init');
+        },
+        onrender: function() {
+            console.log('ux-select render');
+        },
+        onconfig: function() {
+            console.log('ux-select config');
+            this.on('onChange', function(event) {
+                console.log('on change Action');
+            });
+        }
+    });
+    Ractive({
+        target: '#target',
+        template: '#template',
+        data: {
+            material: [{ 'value': 'GOLD', text: 'GOLD' }, { value: 'SILVER', text: 'SILVER' }, { value: 'PLATINUM', text: 'PLATINUM' }, { value: 'DIAMOND', text: 'DIAMOND' }, { value: 'COPPER', text: 'COPPER' }],
+            category: [{ 'value': 'NECKLACE', text: 'NECKLACE' }, { value: 'RING', text: 'RING' }, { value: 'BANGLES', text: 'BANGLES' }, { 'value': 'EARRINGS', text: 'EARRINGS' }],
+            alertData: { msg: '', type: '' },
+            product: {
+                name: '',
+                specification: [],
+                discount: '',
+                price: '',
+                description: '',
+                material: '',
+                category: '',
+                icon_img: '',
+                images: []
+            }
+        },
+        on: {
+            init: function(event) {
+                var id = sessionStorage.getItem('id');
+                var self = this;
+                $.ajax({
+                    method: "GET",
+                    url: "/product/"+id,
+                    success: function(result, model) {
+                        if (result.length > 0) {
+                            result = result[0];
+                            result.specification = JSON.parse(result.specification);
+                            result.images = JSON.parse(result.images);
+                            self.set('product', result);
+                        }
+                    },
+                    error: function(response) {
+                        var error = response.responseJSON;
+                        self.setAlertData(error.message + error.description, 'danger');
+                    }
+                });
+            },
+            saveProduct: function(event) {
+                var self = this;
+                this.setAlertData();
+                var payload = this.get('product');
+                delete payload.lastupdate;
+                if (this.validatePayload(payload)) {
+                    $.ajax({
+                        method: "POST",
+                        data: payload,
+                        url: "/product/update/"+ payload.id,
+                        success: function(result, model) {
+                            self.setAlertData('Product Updated Successfully', 'success');
+                        },
+                        error: function(response) {
+                            var error = response.responseJSON;
+                            self.setAlertData(error.message + error.description, 'danger');
+                        }
+                    });
+
+                } else {
+                    this.setAlertData('Please enter all details', 'danger');
+                }
+            },
+            addSpecification: function() {
+                this.set('product.specification', this.get('product.specification').concat({ key: '', value: '' }));
+            },
+            addImages: function() {
+                this.set('product.images', this.get('product.images').concat({ url: '' }));
+            }
+        },
+        setAlertData: function(msg, type) {
+            this.set('alertData.msg', msg);
+            this.set('alertData.type', type);
+        },
+        validatePayload: function(payload) {
+            var isValid = true;
+            for (var i in payload) {
+                if (typeof payload[i] == 'object') {
+                    payload[i] = (payload[i].length > 0) ? JSON.stringify(payload[i]) : payload[i];
+                }
+                if (!payload[i] && isValid) { isValid = false; break; }
+            }
+            return isValid;
+        }
+    });
+    </script>
+</body>
+
+</html>
