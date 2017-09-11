@@ -17,14 +17,25 @@
 <body>
     <div id="target"></div>
     <script id="template" type="text/ractive">
-        <ux-alert data={{alertData}}/>
-        <div class="container">
-        <a type="button" href="/addProduct.html" class="btn btn-primary">Add Product <span class="glyphicon glyphicon-plus-sign" aria-hidden="true"></span></a>
+        <div class="container main-container">
+            <div class="v-normal row">
+                <span class="col-sm-6"><h1>Admin Panel </h1></span>
+                <span class="col-sm-6">
+                    <a type="button" href="/addProduct.html" class="button v-normal pull-right">Add Product <span class="glyphicon glyphicon-plus-sign" aria-hidden="true"></span>
+                </a><a type="button" href="/dashboard.html" class="button-icon v-normal v-normal-right pull-right"><span class="glyphicon glyphicon-home" aria-hidden="true"></span>
+                </a>
+                </span>
+            </div>
+            <div class="v-normal">
+                <ux-alert class="v-normal" alertData="{{alertData}}"></ux-alert>
+            </div>
+        </div>
+        <div class="container main-container">
             <table id="products" class="display" cellspacing="0" width="100%">
                 <thead>
                     <tr>
                         {{#each column}}
-                        <th class="{{#if((.).toUpperCase() == 'LASTUPDATE')}} hide {{/if}}">
+                        <th class="{{#if ((.).toUpperCase() == 'LASTUPDATE')  || ((.).toUpperCase() == 'IMAGES') || ((.).toUpperCase() == 'ICON_IMG')}} hide {{/if}}">
                             {{(.).toUpperCase()}}
                         </th>
                         {{/each}}
@@ -32,7 +43,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    {{#each product}}
+                    {{#each products}}
                     <tr>
                         <td>{{id}}</td>
                         <td>{{name}}</td>
@@ -41,13 +52,15 @@
                         <td>{{material}}</td>
                         <td>{{discount}}</td>
                         <td>{{specification}}</td>
-                        <td>{{icon_img}}</td>
-                        <td>{{images}}</td>
+                        <td class="hide">{{icon_img}}</td>
+                        <td class="hide">{{images}}</td>
                         <td>{{description}}</td>
                         <td class="hide">{{lastupdate}}</td>
                         <td align="center">
-                            <span> <button type="button" on-click="deleteSpecification" index="{{id}}" class="btn btn-primary"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></button></span>
-                            <span><button type="button" on-click="editSpecification"  index="{{id}}" class="btn btn-primary"><span class="glyphicon glyphicon-pencil" aria-hidden="true"></span></button></span>
+                            <span> <button type="button" on-click="deleteSpecification" index="{{id}}" class="btn btn-danger v-normal-bottom"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></button>
+                            </span>
+                            <span><button type="button" on-click="editSpecification"  index="{{id}}" class="btn btn-success"><span class="glyphicon glyphicon-pencil" aria-hidden="true"></span></button>
+                            </span>
                         </td>
                     </tr>
                     {{/each}}
@@ -56,17 +69,18 @@
         </div>
     </script>
     <script id="ux-alert" type="text/ractive">
-        <div class="container">
-            <!-- type = success, info, warning, danger-->
-            {{#data}}
-            <div class="alert alert-{{type}}" role="alert">{{msg}}</div>
-            {{/}}
-        </div>
+        <!-- type = success, info, warning, danger-->
+        {{#if alertData}}
+        <div class="alert alert-{{alertData.type}}" role="alert">{{{alertData.msg}}}</div>
+        {{/if}}
     </script>
     <script type="text/javascript">
     Ractive.components["ux-alert"] = Ractive.extend({
         template: "#ux-alert",
         isolate: true,
+        data: {
+            alertData: null
+        },
         oninit: function() {
             console.log('ux-alert init');
         },
@@ -74,9 +88,10 @@
             console.log('ux-alert render');
         },
         onconfig: function() {
-            console.log('ux-alert config');
-            this.on('onChange', function(event) {
-                console.log('on change Action');
+            this.observe('alertData', function() {
+                window.setTimeout(function() {
+                    this.set('alertData', null);
+                }.bind(this), 2500);
             });
         }
     });
@@ -85,8 +100,7 @@
         target: '#target',
         template: '#template',
         data: {
-            alertData: { msg: '', type: '' },
-            product: []
+            products: []
         },
         on: {
             init: function() {
@@ -98,7 +112,7 @@
                         if (result.length > 0) {
                             var column = Object.keys(result[0]);
                             self.set('column', column);
-                            self.set('product', result);
+                            self.set('products', result);
                             $('#products').DataTable();
                             $('#products')
                                 .removeClass('display')
@@ -117,13 +131,14 @@
             },
             deleteSpecification: function(event) {
                 var self = this;
-                var id = event.get('id');
+                var selectedProduct = event.get();
                 $.ajax({
                     method: "DELETE",
-                    url: "/product/delete/" + id,
+                    url: "/product/delete/" + selectedProduct.id,
                     success: function(result, model) {
-                        self.setAlertData('Item Deleted' + id, 'success');
-
+                        var products = self.get('products');
+                        self.set('products', _.without(products,selectedProduct));
+                        self.setAlertData('Item Deleted : ' + selectedProduct.id, 'success');
                     },
                     error: function(response) {
                         var error = response.responseJSON;
