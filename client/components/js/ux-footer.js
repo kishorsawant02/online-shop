@@ -1,7 +1,6 @@
-var template =  require('../hbs/ux-footer.html') ;
 
 Ractive.components['ux-footer'] = Ractive.extend({
-    template: template,
+    template: Ractive.parse(ux_footer),
     isolated: true,
     data: {
         title: 'ux-footer'

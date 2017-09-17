@@ -2,19 +2,113 @@
 <html>
 
 <head>
-    <meta charset="UTF-8">
-    <title>Rathi</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black">
-    <meta name="format-detection" content="telephone=no">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <title>Rathi</title>
+    <script type="text/javascript" src="/js/jQuery.min.js"></script>
+    <script type="text/javascript" src="/js/bootstrap.js"></script>
+    <script type="text/javascript" src="/js/bundle.js"></script>
+    <link rel="stylesheet" type="text/css" href="/css/bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="/css/main.css">
 </head>
 
 <body>
+    <div id="target"></div>
+    <script id="template" type="text/ractive">
+        <ux-header></ux-header>
+        <div class="row margin-zero">
+        <div class="container col-md-offset-4 col-md-4 col-sm-12 main-container">
+            <div class="row form-group v-normal">
+                <div class="col-sm-12">
+                    <div class="input-group">
+                        <h1> Rathi Jewelleres </h1>
+                    </div>
+                </div>
+            </div>
+            <div class="row form-group v-normal">
+                <div class="col-sm-12">
+                    <div class="input-group">
+                        <span class="input-group-addon">
+                        <i class="glyphicon glyphicon-phone"></i>
+                    </span>
+                        <input id="mobile" minlength="6" maxlength="15" name="username" placeholder="Enter Username" class="form-control input-md" type="text" value="{{username}}" required>
+                    </div>
+                </div>
+            </div>
+            <div class="row form-group v-normal-bottom">
+                <div class="col-sm-12">
+                    <div class="input-group">
+                        <span class="input-group-addon">
+                        <i class="glyphicon glyphicon-lock"></i>
+                    </span>
+                        <input id="password" minlength="5" maxlength="12" name="password" placeholder="Enter Password" class="form-control input-md" type="password" value="{{password}}" required>
+                    </div>
+                </div>
+            </div>
+            <div class="row form-group v-normal-bottom">
+                <div class="col-sm-12">
+                    <div class="input-group">
+                        <span class="input-group-addon">
+               <i class="glyphicon glyphicon-globe"></i>
+               </span>
+                        <ux-select options="{{locationSet}}" selected_value="{{selected_value}}" />
+                    </div>
+                </div>
+            </div>
+            <div class="row form-group v-normal-bottom">
+                <div class="col-sm-12">
+                    <button type="button" on-click="submitFeedback" class="button">Login In</button>
+                </div>
+            </div>
+            <div class="v-normal-bottom">
+                <ux-alert alertData="{{alertData}}"></ux-alert>
+            </div>
+        </div></div>
+        <ux-footer></ux-footer>
+    </script>
+    <script type="text/javascript">
+    Ractive({
+        target: '#target',
+        template: '#template',
+        data: {
+            username: '',
+            password: '',
+            location: '',
+            alertData: null,
+            locationSet: [{ 'value': 'Aurangabad', text: 'Aurangabad' }, { value: 'Jalna', text: 'Jalna' }, { value: 'Nashik', text: 'Nashik' }]
+        },
+        on: {
+            submitFeedback: function(event) {
+                var self = this;
+                var username = this.get('username'),
+                    password = this.get('password'),
+                    location = this.get('selected_value');
+                this.setAlertData();
+                if (username && password && location) {
+                    $.ajax({
+                        method: "POST",
+                        data: { username: username, password: password, location: location },
+                        url: "/user/login",
+                        success: function(result, model) {
+                            self.setAlertData('Login Success !!!!!\n Redirecting .....', 'success');
+                            window.location.href = '/admin.html';
+                        },
+                        error: function(response) {
+                            var error = response.responseJSON;
+                            self.setAlertData(error.message + error.description, 'danger');
+                        }
+                    });
+                } else {
+                    this.setAlertData('Please enter all details', 'danger');
+                }
+            }
+        },
+        setAlertData: function(msg, type) {
+            this.set('alertData.msg', msg);
+            this.set('alertData.type', type);
+        }
+    });
+    </script>
 </body>
 
 </html>

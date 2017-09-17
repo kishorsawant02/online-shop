@@ -1,0 +1,20 @@
+.ux-image-gallery {
+    .gallery-image {
+        height: 380px;
+        width: 100%;
+        border: 1px solid #cfcfcf;
+        border-radius: 4px;
+    }
+    .image-selection-area {
+        text-align: center;
+        height: 100px;
+        img {
+            height: 100%;
+            width: 100%
+        }
+    }
+    .selected {
+        border: 2px solid green;
+        border-radius: 5px;
+    }
+}

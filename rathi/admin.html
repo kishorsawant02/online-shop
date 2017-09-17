@@ -5,24 +5,30 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Rathi</title>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/lodash@4.17.4/lodash.min.js"></script>
+    <script type="text/javascript" src="/js/jQuery.min.js"></script>
+    <script type="text/javascript" src="/js/bootstrap.js"></script>
+    <script type="text/javascript" src="/js/bundle.js"></script>
+    <script type="text/javascript" src="/js/loadash.js"></script>
+    <link rel="stylesheet" type="text/css" href="/css/bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="/css/main.css">
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/r/bs-3.3.5/jq-2.1.4,dt-1.10.8/datatables.min.css" />
     <script type="text/javascript" src="https://cdn.datatables.net/r/bs-3.3.5/jqc-1.11.3,dt-1.10.8/datatables.min.js"></script>
-    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/ractive"></script>
-    <link rel="stylesheet" type="text/css" href="/css/bootstrap.css">
-    <link rel="stylesheet" type="text/css" href="style.css">
 </head>
 
 <body>
     <div id="target"></div>
     <script id="template" type="text/ractive">
-        <div class="container main-container">
+        <div class="container v-normal-bottom">
             <div class="v-normal row">
                 <span class="col-sm-6"><h1>Admin Panel </h1></span>
                 <span class="col-sm-6">
                     <a type="button" href="/addProduct.html" class="button v-normal pull-right">Add Product <span class="glyphicon glyphicon-plus-sign" aria-hidden="true"></span>
-                </a><a type="button" href="/dashboard.html" class="button-icon v-normal v-normal-right pull-right"><span class="glyphicon glyphicon-home" aria-hidden="true"></span>
+                </a>{{#if view == 'orders'}}
+                <a type="button" on-click="viewChange" data="products" class="button v-normal v-normal-right pull-right">View Products
+                </a> {{else}}
+                <a type="button" on-click="viewChange" data="orders" class="button v-normal v-normal-right pull-right">View Orders 
+                </a>{{/if}}
+                <a type="button" href="/dashboard.html" class="button-icon v-normal v-normal-right pull-right"><span class="glyphicon glyphicon-home" aria-hidden="true"></span>
                 </a>
                 </span>
             </div>
@@ -30,11 +36,11 @@
                 <ux-alert class="v-normal" alertData="{{alertData}}"></ux-alert>
             </div>
         </div>
-        <div class="container main-container">
+        <div class="container p-normal-top p-normal-bottom {{#if view === 'orders'}}hide {{/if}}">
             <table id="products" class="display" cellspacing="0" width="100%">
                 <thead>
                     <tr>
-                        {{#each column}}
+                        {{#each productColumn}}
                         <th class="{{#if ((.).toUpperCase() == 'LASTUPDATE')  || ((.).toUpperCase() == 'IMAGES') || ((.).toUpperCase() == 'ICON_IMG')}} hide {{/if}}">
                             {{(.).toUpperCase()}}
                         </th>
@@ -67,40 +73,47 @@
                 </tbody>
             </table>
         </div>
-    </script>
-    <script id="ux-alert" type="text/ractive">
-        <!-- type = success, info, warning, danger-->
-        {{#if alertData}}
-        <div class="alert alert-{{alertData.type}}" role="alert">{{{alertData.msg}}}</div>
-        {{/if}}
+        <div class="container p-normal-top p-normal-bottom {{#if view === 'products'}} hide {{/if}}">
+            <table id="orders" class="display" cellspacing="0" width="100%">
+                <thead>
+                    <tr>
+                        {{#each orderColumns}}
+                        <th class="{{#if ((.).toUpperCase() == 'LASTUPDATE')  || ((.).toUpperCase() == 'IMAGES') || ((.).toUpperCase() == 'ICON_IMG')}} hide {{/if}}">
+                            {{(.).toUpperCase()}}
+                        </th>
+                        {{/each}}
+                    </tr>
+                </thead>
+                <tbody>
+                    {{#each orders}}
+                    <tr>
+                        <td>{{orderid}}</td>
+                        <td>{{name}}</td>
+                        <td>{{mobile}}</td>
+                        <td>{{adhar}}</td>
+                        <td>{{pan}}</td>
+                        <td>{{address}}</td>
+                        <td>{{product_id}}</td>
+                        <td>{{paymentstatus}}</td>
+                        <td>{{paymentnumber}}</td>
+                        <td>{{user_id}}</td>
+                        <td class="hide">{{lastupdate}}</td>
+                    </tr>
+                    {{/each}}
+                </tbody>
+            </table>
+        </div>
+        <ux-footer></ux-footer>
     </script>
     <script type="text/javascript">
-    Ractive.components["ux-alert"] = Ractive.extend({
-        template: "#ux-alert",
-        isolate: true,
-        data: {
-            alertData: null
-        },
-        oninit: function() {
-            console.log('ux-alert init');
-        },
-        onrender: function() {
-            console.log('ux-alert render');
-        },
-        onconfig: function() {
-            this.observe('alertData', function() {
-                window.setTimeout(function() {
-                    this.set('alertData', null);
-                }.bind(this), 2500);
-            });
-        }
-    });
-
     Ractive({
         target: '#target',
         template: '#template',
         data: {
-            products: []
+            products: [],
+            orders: [],
+            view: 'products',
+            alertData: null
         },
         on: {
             init: function() {
@@ -111,7 +124,7 @@
                     success: function(result, model) {
                         if (result.length > 0) {
                             var column = Object.keys(result[0]);
-                            self.set('column', column);
+                            self.set('productColumn', column);
                             self.set('products', result);
                             $('#products').DataTable();
                             $('#products')
@@ -124,6 +137,28 @@
                         self.setAlertData(error.message + error.description, 'danger');
                     }
                 });
+                $.ajax({
+                    method: "GET",
+                    url: "/customer/orders",
+                    success: function(result, model) {
+                        if (result.length > 0) {
+                            var column = Object.keys(result[0]);
+                            self.set('orderColumns', column);
+                            self.set('orders', result);
+                            $('#orders').DataTable();
+                            $('#orders')
+                                .removeClass('display')
+                                .addClass('table table-striped table-bordered');
+                        }
+                    },
+                    error: function(response) {
+                        var error = response.responseJSON;
+                        self.setAlertData(error.message + error.description, 'danger');
+                    }
+                });
+            },
+            viewChange: function(event, data) {
+                this.set('view', (this.get('view') == 'products') ? 'orders' : 'products');
             },
             editSpecification: function(event) {
                 sessionStorage.setItem('id', event.get('id'));
@@ -137,8 +172,8 @@
                     url: "/product/delete/" + selectedProduct.id,
                     success: function(result, model) {
                         var products = self.get('products');
-                        self.set('products', _.without(products,selectedProduct));
-                        self.setAlertData('Item Deleted : ' + selectedProduct.id, 'success');
+                        self.set('products', _.without(products, selectedProduct));
+                        self.setAlertData('<b>Item Deleted : ' + selectedProduct.id + '</b>', 'success');
                     },
                     error: function(response) {
                         var error = response.responseJSON;

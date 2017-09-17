@@ -1,14 +1,11 @@
-var Ractive = require('ractive');
-var template =  require('../hbs/ux-header.html');
-
-export default Ractive.components['ux-header'] = Ractive.extend({
-    template: template,
+Ractive.components['ux-header'] = Ractive.extend({
+    template: Ractive.parse(ux_header),
     isolated: true,
     data: {
         title: 'ux-header'
     },
     oninit: function() {
-        console.log('ux-header');
+        console.log('ux-heddader');
     },
     oncomplete: function() {
         console.log('ux-header complete');

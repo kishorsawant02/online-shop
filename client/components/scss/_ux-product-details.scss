@@ -1,0 +1,26 @@
+.ux-product-details {
+    .product-name {
+        font-family: Verdana;
+        font-size: 24px;
+        color: #999;
+        font-style: normal;
+        font-variant: normal;
+        font-weight: 400;
+        line-height: 22px;
+    }
+    .product-new-price {
+        font-weight: bold;
+        font-size: 20px;
+    }
+    .product-old-price {
+        font-weight: lighter;
+        color: #e42c42;
+        font-size: 16px;
+        text-decoration: line-through;
+    }
+    .product-discount {
+        font-weight: bold;
+        color: #388e3c;
+        font-size: 16px;
+    }
+}

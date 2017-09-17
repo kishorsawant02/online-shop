@@ -1,0 +1,34 @@
+.ux-product-catalog {
+    .data {
+        padding: 10px;
+    }
+    .product {
+        cursor: pointer;
+        border-radius: 4px;
+        background: #FFF;
+        box-shadow: 1px 2px 2px 1px #d6d6d6;
+        color: #231f20;
+        padding: 1.25rem;
+    }
+    .product-name {
+        font-family: Verdana;
+        font-size: 20px;
+        color: #999;
+        font-style: normal;
+        font-variant: normal;
+        font-weight: 400;
+        line-height: 22px;
+    }
+    .product-new-price {
+        font-weight: bold;
+    }
+    .product-old-price {
+        font-weight: lighter;
+        color: #e42c42;
+         text-decoration: line-through;
+    }
+    .product-discount {
+        font-weight: bold;
+        color: #388e3c;
+    }
+}

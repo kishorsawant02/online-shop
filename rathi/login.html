@@ -5,21 +5,23 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Rathi</title>
-    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/ractive"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <script type="text/javascript" src="/js/jQuery.min.js"></script>
     <script type="text/javascript" src="/js/bootstrap.js"></script>
+    <script type="text/javascript" src="/js/bundle.js"></script>
     <link rel="stylesheet" type="text/css" href="/css/bootstrap.css">
-    <link rel="stylesheet" type="text/css" href="style.css">
+    <link rel="stylesheet" type="text/css" href="/css/main.css">
 </head>
 
 <body>
     <div id="target"></div>
     <script id="template" type="text/ractive">
+        <ux-header></ux-header>
+        <div class="row margin-zero">
         <div class="container col-md-offset-4 col-md-4 col-sm-12 main-container">
             <div class="row form-group v-normal">
                 <div class="col-sm-12">
                     <div class="input-group">
-                        <h1>  Rathi Jewelleres </h1>
+                        <h1> Rathi Jewelleres </h1>
                     </div>
                 </div>
             </div>
@@ -58,61 +60,13 @@
                     <button type="button" on-click="submitFeedback" class="button">Login In</button>
                 </div>
             </div>
-            <ux-alert alertData={{alertData}}/>
-        </div>
-    </script>
-    <script id="ux-select" type="text/ractive">
-        <select value="{{selected_value}}" on-change="onChange" class="form-control">
-            {{#each options}}
-            <option value="{{value}}" selected="{{selected}}">
-                {{text}}
-            </option>
-            {{/each}}
-        </select>
-    </script>
-    <script id="ux-alert" type="text/ractive">
-        <!-- type = success, info, warning, danger-->
-        {{#if alertData}}
-            <div class="alert alert-{{alertData.type}}" role="alert">{{{alertData.msg}}}</div>
-        {{/if}}
+            <div class="v-normal-bottom">
+                <ux-alert alertData="{{alertData}}"></ux-alert>
+            </div>
+        </div></div>
+        <ux-footer></ux-footer>
     </script>
     <script type="text/javascript">
-    Ractive.components["ux-alert"] = Ractive.extend({
-        template: "#ux-alert",
-        isolate: true,
-        data : {
-            alertData:null
-        },
-        oninit: function() {
-            console.log('ux-alert init');
-        },
-        onrender: function() {
-            console.log('ux-alert render');
-        },
-        onconfig: function() {
-            this.observe('alertData', function () {
-                window.setTimeout(function () {
-                    this.set('alertData', null);
-                }.bind(this), 2500) ;
-            });
-        }
-    });
-    Ractive.components["ux-select"] = Ractive.extend({
-        template: "#ux-select",
-        isolate: true,
-        oninit: function() {
-            console.log('ux-select init');
-        },
-        onrender: function() {
-            console.log('ux-select render');
-        },
-        onconfig: function() {
-            console.log('ux-select config');
-            this.on('onChange', function(event) {
-                console.log('on change Action');
-            });
-        }
-    });
     Ractive({
         target: '#target',
         template: '#template',

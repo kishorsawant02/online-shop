@@ -5,175 +5,165 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Rathi</title>
-    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/ractive"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/lodash@4.17.4/lodash.min.js"></script>
+    <script type="text/javascript" src="/js/jQuery.min.js"></script>
     <script type="text/javascript" src="/js/bootstrap.js"></script>
-    <!-- Just to make our placeholder images work. Don't actually copy the next line! -->
-    <script type="text/javascript" src="/js/holder.min.js"></script>
+    <script type="text/javascript" src="/js/bundle.js"></script>
+    <script type="text/javascript" src="/js/loadash.js"></script>
     <link rel="stylesheet" type="text/css" href="/css/bootstrap.css">
-    <link rel="stylesheet" type="text/css" href="style.css">
+    <link rel="stylesheet" type="text/css" href="/css/main.css">
 </head>
 
 <body>
     <div id="target"></div>
     <script id="template" type="text/ractive">
-        <ux-alert data={{alertData}}/>
-        <div class="container">
-            <div class="row">
+        <div class="container v-normal">
+            <div class="form-group v-medium">
+                <div class="col-sm-10">
+                    <h1> Product Details </h1>
+                </div>
+                <div class="col-sm-2">
+                    <a type="button" href="/dashboard.html" class="button-icon v-normal v-normal-right pull-right">
+                    <span class="glyphicon glyphicon-home" aria-hidden="true"></span></a>
+                </div>
+            </div>
+        </div>
+        <div class="container v-normal">
+            <div class="row v-normal">
                 <span class="col-md-5">
                     <ux-image-gallery images="{{product.images}}"> </ux-image-gallery>
                 </span>
                 <span class="col-md-7">
-                    <div class="v-normal-top"><a href="/dashboard.html">HOME</a> > <a href="/products.html">{{product.material}}</a> > <a href="/products.html">{{product.category}}</a></div>
+                    <div class="v-normal-top"><i><a href="/dashboard.html">HOME  </a> > <a href="/products.html">{{product.material}}</a> > <a href="/products.html">{{product.category}}</a></i></div>
                     <ux-product-details  product="{{product}}"></ux-product-details>
                 </span>
             </div>
-            <div class="row">
-                <span class="col-md-12">
+        </div>
+        <div class="container main-container">
+            <div class="row p-large-bottom">
+                <div class="col-sm-12">
                     <ux-prouct-specification product="{{product}}"></ux-prouct-specification>
-                </span>
+                </div>
             </div>
         </div>
-    </script>
-    <script id="ux-alert" type="text/ractive">
-        <div class="container">
-            <!-- type = success, info, warning, danger-->
-            {{#data}}
-            <div class="alert alert-{{type}}" role="alert">{{msg}}</div>
-            {{/}}
-        </div>
-    </script>
-    <script id="ux-image" type="text/ractive">
-        <div class="v-normal " style="text-align: center; height: 280px;">
-            <img src="{{url}}" alt="{{url}}" style="height: 100%;width: 100%;" />
-        </div>
-    </script>
-    <script id="ux-image-gallery" type="text/ractive">
-        <div class="v-normal">
-            <img class="gallery-image" src="{{selectedImage}}" style="height: 380px;width: 100%;border: 1px solid #cfcfcf;" />
-            <div class="color-selection v-normal">
-                {{#each images:index}}
-                <span on-click="doShowSelectedImage" class="col-md-3 p-none-right {{#if index == 0}} p-none-left {{/if}}" style="text-align: center; height: 100px;">
-                        <img src="{{url}}" alt="{{url}}"  class="{{#if selected}} selected {{/if}}" style="{{#if selected}} border: 1px solid green; {{/if}} height: 100%;width: 100%" />
-                    </span> {{/each}}
+        <div id="myModal" class="modal fade" role="dialog">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title">Fill Your Details</h4>
+                    </div>
+                    <div class="modal-body main-container">
+                        <div class="row form-group">
+                            <div class="col-sm-12">
+                                <div class="input-group">
+                                    <span class="input-group-addon"><i class="glyphicon glyphicon-phone"></i></span>
+                                    <input id="mobile" minlength="10" maxlength="10" name="username" placeholder="Enter Mobile Number" class="form-control input-md" type="text" value="{{customer.mobile}}" required>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row form-group">
+                            <div class="col-sm-12">
+                                <div class="input-group">
+                                    <span class="input-group-addon"><i class="glyphicon glyphicon-star"></i></span>
+                                    <input id="mobile" minlength="6" maxlength="15" name="username" placeholder="Enter Name" class="form-control input-md" type="text" value="{{customer.name}}" required>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row form-group">
+                            <div class="col-sm-12">
+                                <div class="input-group">
+                                    <span class="input-group-addon"><i class="glyphicon glyphicon-globe"></i></span>
+                                    <input id="mobile" minlength="6" maxlength="15" name="username" placeholder="Enter Address" class="form-control input-md" type="text" value="{{customer.address}}" required>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row form-group">
+                            <div class="col-sm-12">
+                                <div class="input-group">
+                                    <span class="input-group-addon"><i class="glyphicon glyphicon-star"></i></span>
+                                    <input id="mobile" minlength="6" maxlength="15" name="username" placeholder="Enter PAN" class="form-control input-md" type="text" value="{{customer.pan}}" required>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row form-group">
+                            <div class="col-sm-12">
+                                <div class="input-group">
+                                    <span class="input-group-addon"><i class="glyphicon glyphicon-star"></i></span>
+                                    <input id="mobile" minlength="6" maxlength="15" name="username" placeholder="Enter Adhar" class="form-control input-md" type="text" value="{{customer.adhar}}" required>
+                                </div>
+                            </div>
+                        </div>
+                        <ux-alert alertData="{{alertData}}" successMsg="{{successMsg}}"></ux-alert>
+                        <div class="form-group v-normal">
+                            <button type="button" on-click="submitOrder" class="button">Place Order</button>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
-    </script>
-    <script id="ux-product-details" type="text/ractive">
-        {{#with product}}
-        <div class="row col-md-12">
-            <div class="v-normal" style="font-family: Verdana;font-size: 24px;color:#999;font-style: normal;font-variant: normal;font-weight: 400;line-height: 22px;">{{name}}</div>
-            <div class="v-normal">{{description}}</div>
-            <div style="font-weight: bold; font-size: 20px;">&#x20B9;{{parseInt(price-(price*(discount/100)))}}</div>
-            <div style="font-weight: lighter;color:#e42c42;font-size: 16px;"><strike> &#x20B9;{{price}}</strike> </div>
-            <div style="font-weight: bold;color:#388e3c;font-size: 16px;">{{discount}}% off</div>
-            <button type="button" on-click="saveProduct" class="btn v-normal-top btn-primary">Buy Now</button>
+        <div style="position: fixed;bottom: 120px;right: 8px;">
+            <a type="button" href="/feedback.html" class="button-icon">FeedBack</a>
         </div>
-        {{/with}}
-    </script>
-    <script id="ux-prouct-specification" type="text/ractive">
-        <div class="row col-md-12">
-            <h1>Specification</h1>
-        </div>
-        {{#each product.specification}}
-        <div class="row" style="border-bottom: 1px solid #FFF;">
-            <div><span class="col-md-4 v-normal">{{key}}</span><span class="v-normal col-md-8">{{value}}</span></div>
-        </div>
-        {{/each}}
+        <ux-footer></ux-footer>
     </script>
     <script type="text/javascript">
-    Ractive.components["ux-image-gallery"] = Ractive.extend({
-        template: "#ux-image-gallery",
-        isolate: true,
-        data : {
-            images:[],
-            selectedImage:''
-        },
-        on: {
-            init: function() {
-                console.log('ux-image-gallery init');
-            },
-            render: function() {
-                var images = this.get('images');
-                _.each(images, function (data, index) {
-                    data.selected = (index == 0);
-                    data.index = index;
-                });
-                this.set('images', images);
-                this.set('selectedImage', images[0].url);
-            },
-            doShowSelectedImage: function(event) {
-                var index = event.get('index');
-                this.set('selectedImage', event.get('url'));
-                this.set('images.*.selected', false);
-                this.set('images.'+index+'.selected', true);
-            }
-        }
-    });
-    Ractive.components["ux-prouct-specification"] = Ractive.extend({
-        template: "#ux-prouct-specification",
-        isolate: true,
-        oninit: function() {
-            console.log('ux-prouct-specification init');
-        },
-        onrender: function() {
-            console.log('ux-prouct-specification render');
-        }
-    });
-    Ractive.components["ux-product-details"] = Ractive.extend({
-        template: "#ux-product-details",
-        isolate: true,
-        oninit: function() {
-            console.log('ux-product-details init');
-        },
-        onrender: function() {
-            console.log('ux-product-details render');
-        }
-    });
-    Ractive.components["ux-image"] = Ractive.extend({
-        template: "#ux-image",
-        isolate: true,
-        oninit: function() {
-            console.log('ux-image init');
-        },
-        onrender: function() {
-            console.log('ux-image render');
-        }
-    });
-    Ractive.components["ux-alert"] = Ractive.extend({
-        template: "#ux-alert",
-        isolate: true,
-        oninit: function() {
-            console.log('ux-alert init');
-        },
-        onrender: function() {
-            console.log('ux-alert render');
-        },
-        onconfig: function() {
-            console.log('ux-alert config');
-            this.on('onChange', function(event) {
-                console.log('on change Action');
-            });
-        }
-    });
     Ractive({
         target: '#target',
         template: '#template',
         data: {
-            alertData: { msg: '', type: '' },
-            product: {}
+            product: {},
+            customer: {},
+            successMsg: null
         },
         on: {
             init: function() {
                 var product = JSON.parse(sessionStorage.getItem('product'));
-                product.images.splice(0, 1);
+                if (typeof product.images == 'string') {
+                    product.images = JSON.parse(product.images);
+                    product.images.splice(0, 1);
+                }
+                if (typeof product.specification == 'string') {
+                    product.specification = JSON.parse(product.specification);
+                }
                 this.set('product', product);
+                this.set('customer.product_id', product.id);
+                this.set('customer.user_id', 2131);
+            },
+            submitOrder: function() {
+                var self = this;
+                var customer = this.get('customer');
+                if (this.validatePayload(customer)) {
+                    $.ajax({
+                        method: "POST",
+                        data: customer,
+                        url: "/customer/order",
+                        success: function(result, model) {
+                            self.set('successMsg', 'Order has been Placed successfully <br/><br/>\n <b>Order Id : ' + result.Customer_Order.orderId + '</b><br/> <br/>Please remember all Order Id.<br>Enjoy Shopping !!! ');
+
+                        },
+                        error: function(response) {
+                            var error = response.responseJSON;
+                            self.setAlertData(error.message + error.description, 'danger');
+                        }
+                    });
+                } else {
+                    this.setAlertData('Please enter all details', 'danger');
+                }
             }
         },
         setAlertData: function(msg, type) {
             this.set('alertData.msg', msg);
             this.set('alertData.type', type);
+        },
+        validatePayload: function(payload) {
+            var isValid = true;
+            for (var i in payload) {
+                if (typeof payload[i] == 'object') {
+                    payload[i] = (payload[i].length > 0) ? JSON.stringify(payload[i]) : payload[i];
+                }
+                if (!payload[i] && isValid) { isValid = false; break; }
+            }
+            return isValid;
         }
     });
     </script>

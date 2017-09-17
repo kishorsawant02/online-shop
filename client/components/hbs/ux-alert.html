@@ -1,0 +1,8 @@
+var ux_alert = [KEY]<div class="ux_alert">
+    {{#with alertData}}
+  		<div class="alert alert-{{type}}" role="alert">{{{msg}}}</div>
+    {{/with}}
+    {{#if successMsg}}
+  		<div class="alert alert-success" role="alert">{{{successMsg}}}</div>
+    {{/if}}
+</div>[KEY];

@@ -30,6 +30,24 @@ router.post('/order', function(req, res) {
     });
 });
 
+router.get('/orders', function(req, res) {
+    dbConnector.getConnection(function(error, connection) {
+        if (error) {
+            errorHandler.connectionError(error, connection, res);
+        } else {
+            var query = 'select * from customer;';
+            dbConnector.operation(query, connection, function(error, result, field) {
+                if (error) {
+                    errorHandler.queryError(error, res);
+                } else {
+                    res.status(200);
+                    res.send(result);
+                }
+            });
+        }
+    });
+});
+
 module.exports = router;
 
 //sample payload

@@ -1,0 +1,9 @@
+var ux_specification_box = [KEY]
+	{{#each specification :index}}
+        <div class="v-normal-bottom col-sm-12 row ux-specification-box">
+            <span class="col-sm-5"> <input minlength="4" maxlength="100" placeholder="Enter Key Name" class="form-control" type="text" value="{{key}}"></span>
+            <span class="col-sm-5"><input minlength="4" maxlength="100" placeholder="Enter Value" class="form-control" type="text" value="{{value}}"></span>
+            <span class="col-sm-2"><button type="button" on-click="removeSpecification" index="{{index}}" class="btn btn-danger">-</button></span>
+        </div>
+    {{/each}}
+[KEY];

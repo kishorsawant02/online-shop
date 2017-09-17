@@ -5,129 +5,107 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Rathi</title>
-    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/ractive"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <script type="text/javascript" src="/js/jQuery.min.js"></script>
     <script type="text/javascript" src="/js/bootstrap.js"></script>
-    <!-- Just to make our placeholder images work. Don't actually copy the next line! -->
-    <script type="text/javascript" src="/js/holder.min.js"></script>
+    <script type="text/javascript" src="/js/bundle.js"></script>
     <link rel="stylesheet" type="text/css" href="/css/bootstrap.css">
-    <link rel="stylesheet" type="text/css" href="style.css">
+    <link rel="stylesheet" type="text/css" href="/css/main.css">
 </head>
 
 <body>
     <div id="target"></div>
     <script id="template" type="text/ractive">
-        <ux-alert data={{alertData}}/>
-        <div class="col-md-6">
-            <div class="form-group">
-                <div class="row">
-                    <div class="col-md-6 form-group">
+        <div class="row margin-zero">
+            <div class="container col-md-offset-4 col-md-4 col-sm-12 main-container">
+                <div class="row form-group v-normal">
+                    <div class="col-sm-12">
                         <div class="input-group">
-                            <span class="input-group-addon">
-                              <i class="glyphicon glyphicon-user"></i>
-                              </span>
-                            <input id="text" maxlength="12" name="firstName" placeholder="First Name" class="form-control input-md" type="text" value="{{firstName}}" required>
-                        </div>
-                    </div>
-                    <div class="col-md-6 form-group">
-                        <div class="input-group">
-                            <span class="input-group-addon">
-                              <i class="glyphicon glyphicon-user"></i>
-                              </span>
-                            <input id="text" maxlength="12" name="lastName" placeholder="Last Name" class="form-control input-md" type="text" value="{{lastName}}" required>
+                            <h1>  Rathi Jewelleres </h1>
                         </div>
                     </div>
                 </div>
-            </div>
-            <div class="form-group">
-                <div class="row">
-                    <div class="col-md-12 form-group">
-                        <div class="input-group">
-                            <span class="input-group-addon">
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-md-6 form-group">
+                            <div class="input-group">
+                                <span class="input-group-addon">
+                              <i class="glyphicon glyphicon-user"></i>
+                              </span>
+                                <input id="text" maxlength="20" name="name" placeholder="Varun Gandhi" class="form-control input-md" type="text" value="{{feedback.name}}" required>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-md-6 form-group">
+                            <div class="input-group">
+                                <span class="input-group-addon">
                               <i class="glyphicon glyphicon-phone"></i>
                               </span>
-                            <input id="mobile" maxlength="10" name="mobile" placeholder="xxxxxxxxxxxx" class="form-control input-md" type="text" value="{{mobile}}" required>
+                                <input id="mobile" maxlength="10" name="mobile" placeholder="xxxxxxxxxxxx" class="form-control input-md" type="text" value="{{feedback.mobile}}" required>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
-            <div class="form-group">
-                <div class="row">
-                    <div class="col-md-12 form-group">
-                        <div class="input-group">
-                            <span class="input-group-addon">
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-md-12 form-group">
+                            <div class="input-group">
+                                <span class="input-group-addon">
                                <i class="glyphicon glyphicon-globe"></i>
                               </span>
-                            <input id="address" maxlength="20" name="address" placeholder="address" class="form-control input-md" type="text" value="{{address}}" required>
+                                <input id="address" maxlength="20" name="address" placeholder="address" class="form-control input-md" type="text" value="{{feedback.address}}" required>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
-            <div class="form-group">
-                <div class="row">
-                    <div class="col-md-12">
-                        <textarea name="message" value="{{msg}}" class="form-control" rows="8" cols="80" placeholder="Write your queries/comments/Feedback"></textarea>
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <textarea name="message" value="{{feedback.msg}}" class="form-control" rows="8" cols="80" placeholder="Write your queries/comments/Feedback"></textarea>
+                        </div>
                     </div>
                 </div>
+                <div class="v-normal">
+                    <ux-alert alertData={{alertData}}></ux-alert>
+                </div>
+                <div class="v-large">
+                    <button type="button" on-click="submitFeedback" class="button">Submit</button>
+                </div>
+            </div>
+            <div>
+                <a type="button" href="/dashboard.html" class="button-icon v-normal v-normal-right pull-right"><span class="glyphicon glyphicon-home" aria-hidden="true"></span>
+                </a>
             </div>
         </div>
-        <div class="col-md-4 col-md-offset-4">
-            <button type="button" on-click="submitFeedback" class="btn btn-primary">Submit</button>
-        </div>
-    </script>
-    <script id="ux-alert" type="text/ractive">
-        <div class="container">
-            <!-- type = success, info, warning, danger-->
-            {{#data}}
-            <div class="alert alert-{{type}}" role="alert">{{msg}}</div>
-            {{/}}
-        </div>
+        <ux-footer></ux-footer>
     </script>
     <script type="text/javascript">
-    Ractive.components["ux-alert"] = Ractive.extend({
-        template: "#ux-alert",
-        isolate: true,
-        oninit: function() {
-            console.log('ux-alert init');
-        },
-        onrender: function() {
-            console.log('ux-alert render');
-        },
-        onconfig: function() {
-            console.log('ux-alert config');
-            this.on('onChange', function(event) {
-                console.log('on change Action');
-            });
-        }
-    });
     Ractive({
         target: '#target',
         template: '#template',
         data: {
-            firstName: '',
-            lastName: '',
-            address: '',
-            mobile: '',
-            msg: '',
-            alertData: { msg: '', type: '' },
-            locationSet: [{ 'value': 'Aurangabad', text: 'Aurangabad' }, { value: 'Jalna', text: 'Jalna' }, { value: 'Nashik', text: 'Nashik' }]
+            feedback: {
+                name: '',
+                address: '',
+                mobile: '',
+                msg: ''
+            }
         },
         on: {
             submitFeedback: function(event) {
                 var self = this;
-                var firstName = this.get('firstName'),
-                    lastName = this.get('lastName'),
-                    address = this.get('address'),
-                    mobile = this.get('mobile'),
-                    msg = this.get('msg');
+                var feedback = this.get('feedback');
                 this.setAlertData();
-                if ((firstName || lastName) && address && mobile && msg) {
+                if (this.validatePayload(feedback)) {
                     $.ajax({
                         method: "POST",
-                        data: { name: firstName + ' ' + lastName, mobile: mobile, msg: msg, address: address },
+                        data: feedback,
                         url: "/feedback/insert",
                         success: function(result, model) {
-                            console.log(result);
+                            self.setAlertData('Feedback has been saved successfully !!', 'success');
+                            window.location.href = '/dashboard.html';
                         },
                         error: function(response) {
                             var error = response.responseJSON;
@@ -142,6 +120,16 @@
         setAlertData: function(msg, type) {
             this.set('alertData.msg', msg);
             this.set('alertData.type', type);
+        },
+        validatePayload: function(payload) {
+            var isValid = true;
+            for (var i in payload) {
+                if (typeof payload[i] == 'object') {
+                    payload[i] = (payload[i].length > 0) ? JSON.stringify(payload[i]) : payload[i];
+                }
+                if (!payload[i] && isValid) { isValid = false; break; }
+            }
+            return isValid;
         }
     });
     </script>

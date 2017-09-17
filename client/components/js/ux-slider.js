@@ -1,7 +1,5 @@
-var template =  require('../hbs/ux-slider.html');
-
-Ractive.extend({
-    template: template,
+Ractive.components['ux-slider'] = Ractive.extend({
+    template: Ractive.parse(ux_slider),
     isolated: true,
     data: {
     	title: 'ux-slider'

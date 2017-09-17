@@ -1,0 +1,12 @@
+.ux-carousel {
+    .carousel-inner-height {
+        height: 400px;
+        width: 100%;
+        img {
+            height: 100%;
+            width: 100%;
+            padding: 0 10%;
+            box-sizing: border-box;
+        }
+    }
+}

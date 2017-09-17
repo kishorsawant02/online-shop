@@ -5,18 +5,17 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Rathi</title>
-    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/ractive"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <script type="text/javascript" src="/js/jQuery.min.js"></script>
     <script type="text/javascript" src="/js/bootstrap.js"></script>
-    <!-- Just to make our placeholder images work. Don't actually copy the next line! -->
-    <script type="text/javascript" src="/js/holder.min.js"></script>
+    <script type="text/javascript" src="/js/bundle.js"></script>
     <link rel="stylesheet" type="text/css" href="/css/bootstrap.css">
-    <link rel="stylesheet" type="text/css" href="style.css">
+    <link rel="stylesheet" type="text/css" href="/css/main.css">
 </head>
 
 <body>
     <div id="target"></div>
     <script id="template" type="text/ractive">
+    <div class="row margin-zero">
         <div class="container col-md-offset-3 col-md-6 col-sm-12 main-container">
             <div class="row form-group v-normal">
                 <div class="col-sm-12">
@@ -76,7 +75,7 @@
                     <div class="input-group"><span class="input-group-addon">
                         <i class="glyphicon glyphicon-star"></i>
                     </span>
-                        <ux-select options="{{material}}" selected_value="{{product.material}}" />
+                    <input type="url" placeholder="GOLD/SILVER" value="{{product.material}}" class="form-control input-md" name="icon_img" required>
                     </div>
                 </div>
             </div>
@@ -85,7 +84,7 @@
                     <div class="input-group"><span class="input-group-addon">
                         <i class="glyphicon glyphicon-star"></i>
                     </span>
-                        <ux-select options="{{category}}" selected_value="{{product.category}}" />
+                        <input type="url" placeholder="RING?NECKLACE" value="{{product.category}}" class="form-control input-md" name="icon_img" required>
                     </div>
                 </div>
             </div>
@@ -122,138 +121,26 @@
                             <button type="button" class="close" data-dismiss="modal">&times;</button>
                             <h4 class="modal-title">Preview Product Details</h4>
                         </div>
-                        <div class="modal-body">
+                        <div class="modal-body main-container">
                             {{#each product:i}}
-                            <div><span>{{@key}}</span><span>{{JSON.stringify(.)}}</span></div>
+                                <div class="row p-medium-bottom p-medium-top" style="border-bottom: 2px solid #F6F5F5;">
+                                    <span class="col-sm-3"><b>{{@key.toUpperCase()}}</b></span>
+                                    <span class="col-sm-9"  style="word-wrap: break-word;">{{JSON.stringify(.)}}</span>
+                                </div>
                             {{/each}}
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-    </script>
-    <script id="ux-select" type="text/ractive">
-        <select value="{{selected_value}}" on-change="onChange" class="form-control">
-            {{#each options}}
-            <option value="{{value}}" selected="{{selected}}">
-                {{text}}
-            </option>
-            {{/each}}
-        </select>
-    </script>
-    <script id="ux-alert" type="text/ractive">
-        <!-- type = success, info, warning, danger-->
-        {{#if alertData}}
-        <div class="alert alert-{{alertData.type}}" role="alert">{{{alertData.msg}}}</div>
-        {{/if}}
-    </script>
-    <script id="ux-specification-box" type="text/ractive">
-        {{#each specification :index}}
-        <div class="v-normal-bottom col-sm-12 row">
-            <span class="col-sm-5"> <input minlength="4" maxlength="100" placeholder="Enter Key Name" class="form-control" type="text" value="{{key}}"></span>
-            <span class="col-sm-5"><input minlength="4" maxlength="100" placeholder="Enter Value" class="form-control" type="text" value="{{value}}"></span>
-            <span class="col-sm-2"><button type="button" on-click="removeSpecification" index="{{index}}" class="btn btn-danger">-</button></span>
         </div>
-        {{/each}}
-    </script>
-    <script id="ux-image-url-box" type="text/ractive">
-        {{#each images:index}}
-        <div class="v-normal-bottom col-sm-12 row">
-            <span class="col-sm-10"><input minlength="4" maxlength="100" placeholder="Enter Image Url" class="form-control" type="text" value="{{url}}"></span>
-            <span class="col-sm-2"><button type="button" on-click="removeImage" index="{{index}}" class="btn btn-danger">-</button></span>
-        </div>
-        {{/each}}
+        <ux-footer></ux-footer>
     </script>
     <script type="text/javascript">
-    Ractive.components["ux-image-url-box"] = Ractive.extend({
-        template: "#ux-image-url-box",
-        isolate: true,
-        oninit: function() {
-            console.log('ux-image-url-box init');
-        },
-        onrender: function() {
-            console.log('ux-image-url-box render');
-        },
-        onconfig: function() {
-            console.log('ux-image-url-box config');
-            this.on('onChange', function(event) {
-                console.log('on change Action');
-            });
-        },
-        on: {
-            removeImage: function(event) {
-                var index = event.get('index');
-                var images = this.get('images');
-                images.splice(index, 1);
-                this.set('images', images);
-            }
-        }
-    });
-    Ractive.components["ux-specification-box"] = Ractive.extend({
-        template: "#ux-specification-box",
-        isolate: true,
-        oninit: function() {
-            console.log('ux-specification-box init');
-        },
-        onrender: function() {
-            console.log('ux-specification-box render');
-        },
-        onconfig: function() {
-            console.log('ux-specification-box config');
-            this.on('onChange', function(event) {
-                console.log('on change Action');
-            });
-        },
-        on: {
-            removeSpecification: function(event) {
-                var index = event.get('index');
-                var specification = this.get('specification');
-                specification.splice(index, 1);
-                this.set('specification', specification);
-            }
-        }
-    });
-    Ractive.components["ux-alert"] = Ractive.extend({
-        template: "#ux-alert",
-        isolate: true,
-        data: {
-            alertData: null
-        },
-        oninit: function() {
-            console.log('ux-alert init');
-        },
-        onrender: function() {
-            console.log('ux-alert render');
-        },
-        onconfig: function() {
-            this.observe('alertData', function() {
-                window.setTimeout(function() {
-                    this.set('alertData', null);
-                }.bind(this), 2500);
-            });
-        }
-    });
-    Ractive.components["ux-select"] = Ractive.extend({
-        template: "#ux-select",
-        oninit: function() {
-            console.log('ux-select init');
-        },
-        onrender: function() {
-            console.log('ux-select render');
-        },
-        onconfig: function() {
-            console.log('ux-select config');
-            this.on('onChange', function(event) {
-                console.log('on change Action');
-            });
-        }
-    });
     Ractive({
         target: '#target',
         template: '#template',
         data: {
-            material: [{ 'value': 'GOLD', text: 'GOLD' }, { value: 'SILVER', text: 'SILVER' }, { value: 'PLATINUM', text: 'PLATINUM' }, { value: 'DIAMOND', text: 'DIAMOND' }, { value: 'COPPER', text: 'COPPER' }],
-            category: [{ 'value': 'NECKLACE', text: 'NECKLACE' }, { value: 'RING', text: 'RING' }, { value: 'BANGLES', text: 'BANGLES' }, { 'value': 'EARRINGS', text: 'EARRINGS' }],
             product: {
                 name: '',
                 specification: [],
@@ -293,6 +180,8 @@
                 var payload = this.get('product');
                 delete payload.lastupdate;
                 if (this.validatePayload(payload)) {
+                    payload.material = payload.material.toUpperCase();
+                    payload.category = payload.category.toUpperCase();
                     $.ajax({
                         method: "POST",
                         data: payload,

@@ -9,7 +9,7 @@ CREATE TABLE `choassys`.`product` (
   `discount` INT NULL,
   `specification` VARCHAR(700) NULL,
   `icon_img` VARCHAR(255) NULL,
-  `images` VARCHAR(500) NULL,
+  `images` VARCHAR(800) NULL,
   `description` VARCHAR(1255) NULL,
   `lastupdate` timestamp default current_timestamp,
   PRIMARY KEY (`id`));
@@ -18,13 +18,13 @@ CREATE TABLE `choassys`.`feedback` (
   `id` INT NOT NULL AUTO_INCREMENT ,
   `name` VARCHAR(100) NULL,
   `msg` VARCHAR(255) NULL,
-  `mobile` INT(10) NOT NULL,
+  `mobile` VARCHAR(10) NOT NULL,
   `address` VARCHAR(255) NULL,
   `lastupdate` timestamp default current_timestamp,
    PRIMARY KEY (`id`));
 
 CREATE TABLE `choassys`.`customer` (
-  `mobile` INT(10) NOT NULL,
+  `mobile` VARCHAR(10) NOT NULL,
   `product_id` INT NULL,
   `paymentstatus` VARCHAR(10) NULL,
   `paymentnumber` VARCHAR(45) NULL,
@@ -42,22 +42,18 @@ CREATE TABLE `choassys`.`user` (
   `username` VARCHAR(10) NOT NULL,
   `location` VARCHAR(45) NULL,
   `password` VARCHAR(255) NULL,
-  `mobile` INT(10) NOT NULL,
+  `mobile` VARCHAR(10) NOT NULL,
  `lastupdate` timestamp default current_timestamp,
   PRIMARY KEY (`mobile`));
 
 
 CREATE TABLE `choassys`.`favourite` (
   `id` INT NOT NULL AUTO_INCREMENT ,
-  `name` VARCHAR(45) NULL,
-  `price` FLOAT(12,2) NULL,
+  `startprice` FLOAT(12,2) NULL,
   `category` VARCHAR(45) NULL,
   `material` VARCHAR(45) NULL,
   `discount` INT NULL,
-  `specification` VARCHAR(700) NULL,
   `icon_img` VARCHAR(255) NULL,
-  `images` VARCHAR(500) NULL,
-  `description` VARCHAR(1255) NULL,
   `lastupdate` timestamp default current_timestamp,
   PRIMARY KEY (`id`));
 
@@ -70,7 +66,7 @@ CREATE TABLE `choassys`.`advertisement` (
   `discount` INT NULL,
   `specification` VARCHAR(700) NULL,
   `icon_img` VARCHAR(255) NULL,
-  `images` VARCHAR(500) NULL,
+  `images` VARCHAR(800) NULL,
   `description` VARCHAR(1255) NULL,
   `lastupdate` timestamp default current_timestamp,
   PRIMARY KEY (`id`));

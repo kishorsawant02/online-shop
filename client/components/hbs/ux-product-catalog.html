@@ -1,0 +1,15 @@
+var ux_product_catalog=[KEY]{{#each products:index}}
+<div class="ux-product-catalog">
+    <div class="col-md-3 data">
+        <div on-click="redirectToDetails" product="{{.}}"  class="product">
+            <div class="pager">
+                <ux-image url="{{icon_img}}"></ux-image>
+                <div class="v-small product-name">{{name}}</div>
+                <div class="product-new-price">New Price : &#x20B9;{{parseInt(price-(price*(discount/100)))}}</div>
+                <div class="product-old-price">Old Price : &#x20B9;{{price}}</div>
+                <div  class="product-discount">Discount: {{discount}}%off</div>
+            </div>
+        </div>
+    </div>
+</div>
+{{/each}} [KEY];

@@ -2,6 +2,15 @@
 @import "ux-header";
 @import "ux-slider";
 @import "ux-footer";
+@import "ux-image";
+@import "ux-image-gallery";
+@import "ux-image-url-box";
+@import "ux-specification-box";
+@import "ux-prouct-specification";
+@import "ux-product-catalog";
+@import "ux-product-details";
+@import "ux-carousel";
+@import "ux-generic-box";
 
 html {
   position: relative;
@@ -9,8 +18,7 @@ html {
 }
 body {
   /* Margin bottom by footer height */
-  margin-bottom: 60px;
-  background: #F6F5F5;
+  background: #F6F5F5 !important;
 }
 .footer {
   position: absolute;
@@ -19,11 +27,6 @@ body {
   /* Set the fixed height of the footer here */
   height: 60px;
 }
-
-
-/* Custom page CSS
--------------------------------------------------- */
-/* Not required for template or sticky footer method. */
 
 body > .container {
   padding: 60px 15px 0;

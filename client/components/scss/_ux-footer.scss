@@ -1,0 +1,15 @@
+.ux-footer {
+    text-align: center;
+    position: relative;
+    bottom: 0;
+    width: 100%;
+    border-top: 2px solid #FFF;
+    font-family: Verdana;
+    padding: 24px 0;
+    color: #9a9a9a;
+    .poweredBy {
+        text-align: right;
+        font-style: italic;
+        padding: 0 40px 0 0;
+    }
+}

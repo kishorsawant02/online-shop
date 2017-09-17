@@ -2,19 +2,91 @@
 <html>
 
 <head>
-    <meta charset="UTF-8">
-    <title>Rathi</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black">
-    <meta name="format-detection" content="telephone=no">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <title>Rathi</title>
+    <script type="text/javascript" src="/js/jQuery.min.js"></script>
+    <script type="text/javascript" src="/js/bootstrap.js"></script>
+    <script type="text/javascript" src="/js/loadash.js"></script>
+    <script type="text/javascript" src="/js/bundle.js"></script>
+    <link rel="stylesheet" type="text/css" href="/css/bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="/css/main.css">
 </head>
 
 <body>
+    <div id="target"></div>
+    <script id="template" type="text/ractive">
+        <div class="row margin-zero">
+            <ux-carousel></ux-carousel>
+        </div>
+        <div class="main-container v-large-top v-large-bottom">
+            <h3> Select any product to see available variety !!! </h3>
+        </div>
+        <div class="row v-normal main-container margin-zero">
+            <ux-generic-box products="{{products}}"></ux-generic-box>
+        </div>
+        <ux-footer></ux-footer>
+    </script>
+    <script type="text/javascript">
+    Ractive({
+        target: '#target',
+        template: '#template',
+        data: {
+            material: [],
+            category: [],
+            products: []
+        },
+        on: {
+            init: function() {
+                var self = this;
+                $.ajax({
+                    method: "GET",
+                    url: "/product/",
+                    success: function(results, model) {
+                        if (results.length > 0) {
+                            var material = [],
+                                category = [];
+                            _.each(results, function(result) {
+                                material.push(result.material);
+                                category.push(result.category);
+                            });
+                            material = _.uniq(material);
+                            category = _.uniq(category);
+                            self.set('material', material);
+                            self.set('category', category);
+                            //Values for filter options
+                            material = _.map(material, function(result) {
+                                return { value: result, text: result }
+                            });
+                            category = _.map(category, function(result) {
+                                return { value: result, text: result }
+                            });
+                            category.push({ value: 'ALL', text: 'ALL' });
+                            material.push({ value: 'ALL', text: 'ALL' });
+                            sessionStorage.setItem('material', JSON.stringify(material));
+                            sessionStorage.setItem('category', JSON.stringify(category));
+                        }
+                    },
+                    error: function(response) {
+                        var error = response.responseJSON;
+                        self.setAlertData(error.message + error.description, 'danger');
+                    }
+                });
+                $.ajax({
+                    url: "/slider/fav",
+                    success: function(result, model) {
+                        self.set('products', result);
+                    },
+                    error: function(response) {
+                        self.detach();
+                        var error = response.responseJSON;
+                        self.setAlertData(error.message + error.description, 'danger');
+                    }
+                });
+            }
+        }
+    });
+    </script>
 </body>
 
 </html>

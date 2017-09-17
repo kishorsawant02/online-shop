@@ -1,0 +1,11 @@
+var ux_image_gallery = [KEY]
+<div class="v-normal ux-image-gallery">
+    <img class="gallery-image" src="{{selectedImage}}" />
+    <div class="color-selection v-normal">
+        {{#each images:index}}
+        <span on-click="doShowSelectedImage" class="image-selection-area col-md-3 p-none-right {{#if selected}} selected {{/if}} {{#if index == 0}} p-none-left {{/if}}">
+                        <img src="{{url}}" alt="Not found"  class=""/>
+                    </span> {{/each}}
+    </div>
+</div>
+[KEY];

@@ -11,7 +11,7 @@ module.exports = function() {
     /**
      * set client landing folder
      */
-    app.use(express.static(path.join(__dirname, 'assests')));
+    app.use(express.static(path.join(__dirname, 'deploy')));
 
     var logger = require('./server/utils/logger');
     app.use(logger);

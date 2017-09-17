@@ -1,0 +1,11 @@
+var ux_select = [KEY]
+	<div class="ux-select">
+		<select value="{{selected_value}}" on-change="onChange" class="form-control">
+		    {{#each options:i}}
+		    <option value="{{value}}" selected="{{selected}}">
+		        {{text}}
+		    </option>
+		    {{/each}}
+		</select>
+	</div>
+[KEY];
