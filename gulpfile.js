@@ -67,6 +67,8 @@ gulp.task('watch', function() {
     gulp.watch(basePath + 'components/js/*.*', ['file-merge']);
     gulp.watch(basePath + 'components/hbs/*.*', ['hbs-concat','file-merge']);
     gulp.watch(basePath + 'components/scss/*.*', ['sass']);
+    gulp.watch(basePath + 'components/lib/css/*.*', ['sass']);
+    gulp.watch(basePath + 'components/lib/img/*.*', ['copy']);
     gulp.watch(basePath + 'pages/*.*', ['html']);
 });
 

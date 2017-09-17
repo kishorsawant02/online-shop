@@ -125,7 +125,7 @@ function getUserDetails(req, res, data, callback) {
             dbConnector.operation(query, connection, function(error, result, field) {
                 if (error) {
                     errorHandler.queryError(error, res);
-                } else if (result.length == 0) {
+                } else if (result.length == 0 || (result && result[0].admin !== data.admin)) {
                     //result length 0 :  no username 
                     var error = {
                         username: false,

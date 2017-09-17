@@ -16,6 +16,7 @@
 <body>
     <div id="target"></div>
     <script id="template" type="text/ractive">
+        <ux-header></ux-header>
         <div class="container v-normal">
             <div class="form-group v-medium">
                 <div class="col-sm-10">
@@ -127,7 +128,7 @@
                 }
                 this.set('product', product);
                 this.set('customer.product_id', product.id);
-                this.set('customer.user_id', 2131);
+                this.set('customer.user_id', sessionStorage.getItem('username'));
             },
             submitOrder: function() {
                 var self = this;
@@ -138,7 +139,10 @@
                         data: customer,
                         url: "/customer/order",
                         success: function(result, model) {
-                            self.set('successMsg', 'Order has been Placed successfully <br/><br/>\n <b>Order Id : ' + result.Customer_Order.orderId + '</b><br/> <br/>Please remember all Order Id.<br>Enjoy Shopping !!! ');
+                            self.set('successMsg', 'Order has been Placed successfully <br/><br/>\n <b>Order Id : ' + result.Customer_Order.orderId + '</b><br/> <br/>Please remember all Order Id.<br>Message will be close After <b>7sec </b>.<br>Enjoy Shopping !!! ');
+                            window.setTimeout(function (){
+                                window.location.href = '/products.html';
+                            },7000);
 
                         },
                         error: function(response) {

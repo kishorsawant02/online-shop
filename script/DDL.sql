@@ -31,7 +31,7 @@ CREATE TABLE `choassys`.`customer` (
   `name` VARCHAR(45) NULL,
   `address` VARCHAR(45) NULL,
   `pan` VARCHAR(45) NULL,
-  `user_id` INT(10) NOT NULL,
+  `user_id` VARCHAR(10) NOT NULL,
   `adhar` VARCHAR(45) NULL,
   `orderid` INT NOT NULL AUTO_INCREMENT,
  `lastupdate` timestamp default current_timestamp,
@@ -43,6 +43,7 @@ CREATE TABLE `choassys`.`user` (
   `location` VARCHAR(45) NULL,
   `password` VARCHAR(255) NULL,
   `mobile` VARCHAR(10) NOT NULL,
+  `admin` VARCHAR(1) NOT NULL,
  `lastupdate` timestamp default current_timestamp,
   PRIMARY KEY (`mobile`));
 

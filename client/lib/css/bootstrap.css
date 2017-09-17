@@ -130,8 +130,10 @@ button {
     font-family: Verdana;
     font-size: 16px;
     font-weight: bold;
-    color: #ed1a3d;
-    border: 2px solid #ed1a3d;
+    /*color: #ed1a3d;
+    border: 2px solid #ed1a3d;*/
+    color: #FF6C2C;
+    border: 2px solid #FF6C2C;
     -webkit-transition: background-color .3s ease-out;
     transition: background-color .3s ease-out;
 }
@@ -142,7 +144,8 @@ button {
 .button-icon:focus,
 .button-icon.focus{
   color: #FFF;
-  background-color: #ed1a3d;
+  /*background-color: #ed1a3d;*/
+  background-color: #FF6C2C;
 }
 .button-icon {
   min-width: 10px;
@@ -6360,7 +6363,7 @@ button.close {
   top: 0;
   bottom: 0;
   left: 0;
-  width: 15%;
+  width: 5%;
   font-size: 20px;
   color: #fff;
   text-align: center;
@@ -6370,22 +6373,12 @@ button.close {
   opacity: .5;
 }
 .carousel-control.left {
-  background-image: -webkit-linear-gradient(left, rgba(0, 0, 0, .5) 0%, rgba(0, 0, 0, .0001) 100%);
-  background-image:      -o-linear-gradient(left, rgba(0, 0, 0, .5) 0%, rgba(0, 0, 0, .0001) 100%);
-  background-image: -webkit-gradient(linear, left top, right top, from(rgba(0, 0, 0, .5)), to(rgba(0, 0, 0, .0001)));
-  background-image:         linear-gradient(to right, rgba(0, 0, 0, .5) 0%, rgba(0, 0, 0, .0001) 100%);
-  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#80000000', endColorstr='#00000000', GradientType=1);
-  background-repeat: repeat-x;
+  
 }
 .carousel-control.right {
   right: 0;
   left: auto;
-  background-image: -webkit-linear-gradient(left, rgba(0, 0, 0, .0001) 0%, rgba(0, 0, 0, .5) 100%);
-  background-image:      -o-linear-gradient(left, rgba(0, 0, 0, .0001) 0%, rgba(0, 0, 0, .5) 100%);
-  background-image: -webkit-gradient(linear, left top, right top, from(rgba(0, 0, 0, .0001)), to(rgba(0, 0, 0, .5)));
-  background-image:         linear-gradient(to right, rgba(0, 0, 0, .0001) 0%, rgba(0, 0, 0, .5) 100%);
-  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#00000000', endColorstr='#80000000', GradientType=1);
-  background-repeat: repeat-x;
+ 
 }
 .carousel-control:hover,
 .carousel-control:focus {
