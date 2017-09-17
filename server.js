@@ -14,7 +14,3 @@ app.set('port', process.env.PORT || 18080);
 app.listen(app.get('port'), function () {
     console.log('::Listining localhost ::', +app.get('port'));
 });
-
-
-//sales.rathi12
-//Sales@123
