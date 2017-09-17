@@ -15,7 +15,7 @@ Ractive.components["ux-alert"] = Ractive.extend({
         this.observe('alertData', function() {
             window.setTimeout(function() {
                 this.set('alertData', null);
-            }.bind(this), 3500);
+            }.bind(this), 4000);
         });
         this.observe('successMsg', function() {
             window.setTimeout(function() {
