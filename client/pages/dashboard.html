@@ -27,6 +27,7 @@
             <ux-generic-box products="{{products}}"></ux-generic-box>
         </div>
         <ux-footer></ux-footer>
+        <ux-login></ux-login>
     </script>
     <script type="text/javascript">
     Ractive({
@@ -74,7 +75,7 @@
                     }
                 });
                 $.ajax({
-                    url: "/slider/fav",
+                    url: "/slider/category",
                     success: function(result, model) {
                         self.set('products', result);
                     },

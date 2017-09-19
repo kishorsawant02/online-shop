@@ -11,18 +11,18 @@ router.post('/order', function(req, res) {
         if (error) {
             errorHandler.connectionError(error, connection, res);
         } else {
-        	var data = helper.getKeyValueArray(req.body);
+            var data = helper.getKeyValueArray(req.body);
             var query = 'INSERT INTO customer (`' + data.keys.join('`, `') + '`) VALUES (\'' + data.values.join('\', \'') + '\');';
             dbConnector.operation(query, connection, function(error, result, field) {
                 if (error) {
                     errorHandler.queryError(error, res);
                 } else {
-                	res.status(200);
+                    res.status(200);
                     res.send({
-                    	Customer_Order: {
-                    		status:'OK',
-                    		orderId:result && result.insertId
-                    	}
+                        Customer_Order: {
+                            status: 'OK',
+                            orderId: result && result.insertId
+                        }
                     });
                 }
             });
@@ -42,6 +42,28 @@ router.get('/orders', function(req, res) {
                 } else {
                     res.status(200);
                     res.send(result);
+                }
+            });
+        }
+    });
+});
+
+//delete Order
+router.delete('/order/delete/:id', function(req, res) {
+    dbConnector.getConnection(function(error, connection) {
+        if (error) {
+            errorHandler.connectionError(error, connection, res);
+        } else {
+            var id = req.params.id;
+            var query = 'delete from customer where orderid=' + id + ';';
+            dbConnector.operation(query, connection, function(error, result, field) {
+                if (error) {
+                    errorHandler.queryError(error, res);
+                } else {
+                    res.status(200);
+                    res.send({
+                        status: 'DELETED_SUCCESS'
+                    });
                 }
             });
         }

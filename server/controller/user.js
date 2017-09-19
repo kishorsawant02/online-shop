@@ -29,6 +29,28 @@ router.post('/register', function(req, res) {
     });
 });
 
+//delete user
+router.delete('/delete/:id', function(req, res) {
+    dbConnector.getConnection(function(error, connection) {
+        if (error) {
+            errorHandler.connectionError(error, connection, res);
+        } else {
+            var id = req.params.id;
+            var query = 'delete from user where username= \'' + id + '\';';
+            dbConnector.operation(query, connection, function(error, result, field) {
+                if (error) {
+                    errorHandler.queryError(error, res);
+                } else {
+                    res.status(200);
+                    res.send({
+                        status: 'DELETED_SUCCESS'
+                    });
+                }
+            });
+        }
+    });
+});
+
 //check user login credentials
 router.post('/login', function(req, res) {
     var data = req.body;
@@ -116,6 +138,32 @@ router.post('/password/change', function(req, res) {
     });
 });
 
+router.post('/isAdminLogin', function(req, res) {
+    var data = req.body;
+    getUserDetails(req, res, data, function(result) {
+        var result = result[0];
+        if (result.admin == data.admin) {
+            res.status(200);
+            res.send({
+                User: {
+                    status: 'OK'
+                }
+            });
+        } else {
+            var error = {
+                username: true,
+                admin: false,
+                location: false,
+                status: "400",
+                message: "password does not Match.",
+                description: "Please enter correct password."
+            };
+            errorHandler.authenticationError(error, res);
+        }
+
+    });
+});
+
 function getUserDetails(req, res, data, callback) {
     dbConnector.getConnection(function(error, connection) {
         if (error) {
@@ -125,7 +173,7 @@ function getUserDetails(req, res, data, callback) {
             dbConnector.operation(query, connection, function(error, result, field) {
                 if (error) {
                     errorHandler.queryError(error, res);
-                } else if (result.length == 0 || (result && result[0].admin !== data.admin)) {
+                } else if (result.length == 0 || (result && result[0].admin != data.admin)) {
                     //result length 0 :  no username 
                     var error = {
                         username: false,

@@ -1,10 +1,13 @@
 var express = require('express'),
     router = express.Router(),
     dbConnector = require('../utils/dbConnector'),
-    errorHandler = require('../utils/Error');
+    errorHandler = require('../utils/Error'),
+    sliderCrud = require('./sliderCrud'),
+    _ = require('lodash');
 
+_.extend(router, sliderCrud);
 // Get favourite Products
-router.get('/fav', function(req, res) {
+router.get('/category', function(req, res) {
     dbConnector.getConnection(function(error, connection) {
         if (error) {
             errorHandler.connectionError(error, connection, res);
@@ -21,6 +24,29 @@ router.get('/fav', function(req, res) {
         }
     });
 });
+//delete product
+router.delete('/category/delete/:id', function(req, res) {
+    dbConnector.getConnection(function(error, connection) {
+        if (error) {
+            errorHandler.connectionError(error, connection, res);
+        } else {
+            var id = req.params.id;
+            var query = 'delete from favourite where id=' + id + ';';
+            dbConnector.operation(query, connection, function(error, result, field) {
+                if (error) {
+                    errorHandler.queryError(error, res);
+                } else {
+                    res.status(200);
+                    res.send({
+                        status: 'DELETED_SUCCESS',
+                        productId: req.params.id
+                    });
+                }
+            });
+        }
+    });
+});
+
 
 //get all latest product for dashboard Slider
 router.get('/latest', function(req, res) {
@@ -41,5 +67,27 @@ router.get('/latest', function(req, res) {
     });
 });
 
+//delete product
+router.delete('/latest/delete/:id', function(req, res) {
+    dbConnector.getConnection(function(error, connection) {
+        if (error) {
+            errorHandler.connectionError(error, connection, res);
+        } else {
+            var id = req.params.id;
+            var query = 'delete from advertisement where id=' + id + ';';
+            dbConnector.operation(query, connection, function(error, result, field) {
+                if (error) {
+                    errorHandler.queryError(error, res);
+                } else {
+                    res.status(200);
+                    res.send({
+                        status: 'DELETED_SUCCESS',
+                        productId: req.params.id
+                    });
+                }
+            });
+        }
+    });
+});
 
 module.exports = router;
