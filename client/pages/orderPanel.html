@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rathi</title>
+    <script type="text/javascript" src="/js/jQuery.min.js"></script>
+    <script type="text/javascript" src="/js/bootstrap.js"></script>
+    <script type="text/javascript" src="/js/bundle.js"></script>
+    <script type="text/javascript" src="/js/loadash.js"></script>
+    <script type="text/javascript" src="/js/datatables.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="/css/bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="/css/main.css">
+    <link rel="stylesheet" type="text/css" href="/css/datatables.min.css" />
+</head>
+
+<body>
+    <div id="target"></div>
+    <script id="template" type="text/ractive">
+        <ux-header></ux-header>
+        <div class="container v-normal-bottom">
+            <div class="v-normal row">
+                <span class="col-sm-6"><h1>Order Panel </h1></span>
+                <span class="col-sm-6">
+                    
+                <a type="button" href="/adminDashboard.html" class="button-icon v-normal v-normal-right pull-right"><span class="glyphicon glyphicon-home" aria-hidden="true"></span>
+                </a>
+                </span>
+            </div>
+            <div class="v-normal">
+                <ux-alert class="v-normal" alertData="{{alertData}}"></ux-alert>
+            </div>
+        </div>
+        <div class="container p-normal-top p-normal-bottom">
+            <table id="orders" class="display" cellspacing="0" width="100%">
+                <thead>
+                    <tr>
+                        {{#each orderColumns}} {{#if ((.).toUpperCase() == 'PRODUCT_ID') }}
+                        <th class="">
+                            PRODID
+                        </th>
+                        {{elseif ((.).toUpperCase() == 'ORDERID') }}
+                        <th class="">
+                            ORDER
+                        </th>
+                        {{elseif ((.).toUpperCase() == 'USER_ID') }}
+                        <th class="">
+                            DEALER
+                        </th>
+                        {{elseif ((.).toUpperCase() == 'PAYMENTSTATUS') }}
+                        <th class="">
+                            STATUS
+                        </th>
+                        {{else}}
+                        <th class="{{#if ((.).toUpperCase() == 'LASTUPDATE') }} hide {{/if}}">
+                            {{(.).toUpperCase()}}
+                        </th>
+                        {{/if}}
+                        {{/each}}
+                        <th><span class="glyphicon glyphicon-cog" aria-hidden="true"></span></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {{#each orders}}
+                    <tr>
+                        <td>{{mobile}}</td>
+                        <td>{{product_id}}</td>
+                        <td>{{paymentstatus}}</td>
+                        <td>{{paymentnumber}}</td>
+                        <td>{{name}}</td>
+                        <td>{{address}}</td>
+                        <td>{{pan}}</td>
+                        <td>{{user_id}}</td>
+                        <td>{{adhar}}</td>
+                        <td>{{orderid}}</td>
+                        <td class="hide">{{lastupdate}}</td>
+                        <td align="center">
+                            <span> <button type="button" on-click="deleteOrder" index="{{id}}" class="btn btn-danger v-normal-bottom"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></button>
+                            </span>
+                        </td>
+                    </tr>
+                    {{/each}}
+                </tbody>
+            </table>
+        </div>
+        <ux-footer style="{{#if orders.length < 5}} position: absolute; {{/if}}"></ux-footer>
+        <ux-login type="{{false}}"></ux-login>
+    </script>
+    <script type="text/javascript">
+    Ractive({
+        target: '#target',
+        template: '#template',
+        data: {
+            orders: [],
+            alertData: null
+        },
+        on: {
+            init: function() {
+                var self = this;
+                $.ajax({
+                    method: "GET",
+                    url: "/customer/orders",
+                    success: function(result, model) {
+                        if (result.length > 0) {
+                            var column = Object.keys(result[0]);
+                            self.set('orderColumns', column);
+                            self.set('orders', result);
+                            $('#orders').DataTable();
+                            $('#orders')
+                                .removeClass('display')
+                                .addClass('table table-striped table-bordered');
+                        }
+                    },
+                    error: function(response) {
+                        var error = response.responseJSON;
+                        self.setAlertData(error.message + error.description, 'danger');
+                    }
+                });
+            },
+            deleteOrder: function(event) {
+                var self = this;
+                var selectedOrder = event.get();
+                $.ajax({
+                    method: "DELETE",
+                    url: "/customer/order/delete/" + selectedOrder.orderid,
+                    success: function(result, model) {
+                        var orders = self.get('orders');
+                        self.set('orders', _.without(orders, selectedOrder));
+                        self.setAlertData('<b>Item Deleted : ' + selectedOrder.orderid + '</b>', 'success');
+                    },
+                    error: function(response) {
+                        var error = response.responseJSON;
+                        self.setAlertData(error.message + error.description, 'danger');
+                    }
+                });
+            }
+        },
+        setAlertData: function(msg, type) {
+            this.set('alertData.msg', msg);
+            this.set('alertData.type', type);
+        }
+    });
+    </script>
+</body>
+
+</html>

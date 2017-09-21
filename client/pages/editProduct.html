@@ -49,7 +49,7 @@
                         <div class="input-group"><span class="input-group-addon">
                         <i class="glyphicon glyphicon-star"></i>
                     </span>
-                            <input minlength="4" maxlength="25" name="discount amount" placeholder="Enter discount amount" class="form-control input-md" type="number" value="{{product.discount}}" required>
+                            <input minlength="4" maxlength="25" name="discount amount" placeholder="Enter discount amount" class="form-control input-md" type="text" value="{{product.discount}}" required>
                         </div>
                     </div>
                 </div>
@@ -76,7 +76,7 @@
                         <div class="input-group"><span class="input-group-addon">
                         <i class="glyphicon glyphicon-star"></i>
                     </span>
-                            <input type="url" placeholder="GOLD/SILVER" value="{{product.material}}" class="form-control input-md" name="icon_img" required>
+                            <ux-select options="{{material}}" selected_value="{{product.material}}" />
                         </div>
                     </div>
                 </div>
@@ -86,6 +86,26 @@
                         <i class="glyphicon glyphicon-star"></i>
                     </span>
                             <input type="url" placeholder="RING?NECKLACE" value="{{product.category}}" class="form-control input-md" name="icon_img" required>
+                        </div>
+                    </div>
+                </div>
+                <div class="row form-group">
+                    <div class="col-sm-12">
+                        <div class="input-group">
+                            <span class="input-group-addon">
+                        <i class="glyphicon glyphicon-star"></i>
+                    </span>
+                            <ux-select options="{{type}}" selected_value="{{product.type}}" />
+                        </div>
+                    </div>
+                </div>
+                <div class="row form-group">
+                    <div class="col-sm-12">
+                        <div class="input-group">
+                            <span class="input-group-addon">
+                        <i class="glyphicon glyphicon-star"></i>
+                    </span>
+                            <input type="url" placeholder="10/23.1" value="{{product.weight}}" class="form-control " name="icon_img" required>
                         </div>
                     </div>
                 </div>
@@ -152,8 +172,12 @@
                 material: '',
                 category: '',
                 icon_img: '',
+                weight:'',
+                type:'',
                 images: []
-            }
+            },
+             material: [{value: 'GOLD', text: 'GOLD' },{value: 'SILVER', text: 'SILVER' },{value: 'DIAMOND', text: 'DIAMOND' },{value: 'PLATINUM', text: 'PLATINUM' }],
+             type: [{value: 'GO', text: 'GO' },{value: 'SO', text: 'SO' },{value: 'DO', text: 'DO' },{value: 'PO', text: 'PO' },{value: 'GP', text: 'GP' },{value: 'SP', text: 'SP' },{value: 'DP', text: 'DP' },{value: 'PP', text: 'PP' }]
         },
         on: {
             init: function(event) {
@@ -165,14 +189,18 @@
                     success: function(result, model) {
                         if (result.length > 0) {
                             result = result[0];
-                            result.specification = JSON.parse(result.specification);
-                            result.images = JSON.parse(result.images);
+                            result.specification = JSON.parse(result.specification) || [];
+                            result.images = JSON.parse(result.images) || [];
                             self.set('product', result);
                         }
                     },
                     error: function(response) {
                         var error = response.responseJSON;
-                        self.setAlertData(error.message + error.description, 'danger');
+                        if (error) {
+                            self.setAlertData(error.message + error.description, 'danger');
+                        } else {
+                            self.setAlertData('No Item Found', 'danger');
+                        }
                     }
                 });
             },
@@ -193,6 +221,7 @@
                         },
                         error: function(response) {
                             var error = response.responseJSON;
+                            
                             self.setAlertData(error.message + error.description, 'danger');
                         }
                     });

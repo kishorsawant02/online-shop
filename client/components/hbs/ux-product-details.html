@@ -2,9 +2,7 @@
 <div class="ux-product-details">
     <div class="v-normal product-name" style="">{{name}}</div>
     <div class="v-normal-top v-large-bottom">{{{description}}}</div>
-    <div class="product-new-price">&#x20B9;{{parseInt(price-(price*(discount/100)))}}</div>
-    <div class="product-old-price"> &#x20B9;{{price}}</div>
-    <div class="product-discount">{{discount}}% off</div>
+    <div class="product-new-price">&#x20B9;{{parseFloat(price * weight).toFixed(2)}}</div>
     <button type="button" class="button v-large-top" data-toggle="modal" data-target="#myModal"> Buy Now</button>
 </div>
 {{/with}}[KEY];

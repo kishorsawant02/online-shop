@@ -4,4 +4,5 @@ module.exports = {
 	'/customer': require('../controller/customer'),
 	'/feedback': require('../controller/feedback'),
 	'/slider': require('../controller/slider'),
+	'/pricing': require('../controller/pricing')
 };

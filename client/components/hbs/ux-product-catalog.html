@@ -5,9 +5,8 @@ var ux_product_catalog=[KEY]{{#each products:index}}
             <div class="pager">
                 <ux-image url="{{icon_img}}"></ux-image>
                 <div class="v-small product-name">{{name}}</div>
-                <div class="product-new-price">New Price : &#x20B9;{{parseInt(price-(price*(discount/100)))}}</div>
-                <div class="product-old-price">Old Price : &#x20B9;{{price}}</div>
-                <div  class="product-discount">Discount: {{discount}}%off</div>
+                <div class="product-new-price">Price : &#x20B9;{{parseFloat(price * weight).toFixed(2)}}</div>
+                
             </div>
         </div>
     </div>

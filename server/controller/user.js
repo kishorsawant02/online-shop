@@ -29,6 +29,25 @@ router.post('/register', function(req, res) {
     });
 });
 
+//Get all Users
+router.get('/', function(req, res) {
+    dbConnector.getConnection(function(error, connection) {
+        if (error) {
+            errorHandler.connectionError(error, connection, res);
+        } else {
+            var query = 'select * from user;';
+            dbConnector.operation(query, connection, function(error, result, field) {
+                if (error) {
+                    errorHandler.queryError(error, res);
+                } else {
+                    res.status(200);
+                    res.send(result);
+                }
+            });
+        }
+    });
+});
+
 //delete user
 router.delete('/delete/:id', function(req, res) {
     dbConnector.getConnection(function(error, connection) {

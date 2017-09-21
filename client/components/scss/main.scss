@@ -13,29 +13,43 @@
 @import "ux-generic-box";
 
 html {
-  position: relative;
-  min-height: 100%;
+    position: relative;
+    min-height: 100%;
 }
+
 body {
-  /* Margin bottom by footer height */
-  background: #F6F5F5 !important;
+    /* Margin bottom by footer height */
+    background: #F6F5F5 !important;
+    /* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#0a0e0a+0,aebcbf+14,aebcbf+14,aebcbf+17,0a0e0a+37,6e7774+65,0a0809+83 */
+    background: rgb(10, 14, 10) !important;
+    /* Old browsers */
+    background: -moz-linear-gradient(-45deg, rgba(10, 14, 10, 1) 0%, rgba(174, 188, 191, 1) 14%, rgba(174, 188, 191, 1) 14%, rgba(174, 188, 191, 1) 17%, rgba(10, 14, 10, 1) 37%, rgba(110, 119, 116, 1) 65%, rgba(10, 8, 9, 1) 83%) !important;
+    /* FF3.6-15 */
+    background: -webkit-linear-gradient(-45deg, rgba(10, 14, 10, 1) 0%, rgba(174, 188, 191, 1) 14%, rgba(174, 188, 191, 1) 14%, rgba(174, 188, 191, 1) 17%, rgba(10, 14, 10, 1) 37%, rgba(110, 119, 116, 1) 65%, rgba(10, 8, 9, 1) 83%) !important;
+    /* Chrome10-25,Safari5.1-6 */
+    background: linear-gradient(135deg, rgba(10, 14, 10, 1) 0%, rgba(174, 188, 191, 1) 14%, rgba(174, 188, 191, 1) 14%, rgba(174, 188, 191, 1) 17%, rgba(10, 14, 10, 1) 37%, rgba(110, 119, 116, 1) 65%, rgba(10, 8, 9, 1) 83%) !important;
+    /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#0a0e0a', endColorstr='#0a0809', GradientType=1) !important;
+    /* IE6-9 fallback on horizontal gradient */
 }
+
 .footer {
-  position: absolute;
-  bottom: 0;
-  width: 100%;
-  /* Set the fixed height of the footer here */
-  height: 60px;
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    /* Set the fixed height of the footer here */
+    height: 60px;
 }
 
-body > .container {
-  padding: 60px 15px 0;
+body>.container {
+    padding: 60px 15px 0;
 }
+
 .container .text-muted {
-  margin: 20px 0;
+    margin: 20px 0;
 }
 
-.footer > .container {
-  padding-right: 15px;
-  padding-left: 15px;
+.footer>.container {
+    padding-right: 15px;
+    padding-left: 15px;
 }

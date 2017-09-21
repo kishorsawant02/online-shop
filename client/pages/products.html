@@ -62,7 +62,7 @@
         data: {
             allProducts: [],
             products: [],
-            material: JSON.parse(sessionStorage.getItem('material')),
+            material: [{value: 'ALL', text: 'ALL' },{value: 'GOLD', text: 'GOLD' },{value: 'SILVER', text: 'SILVER' },{value: 'DIAMOND', text: 'DIAMOND' },{value: 'PLATINUM', text: 'PLATINUM' }],
             category: JSON.parse(sessionStorage.getItem('category')),
             selected_material: sessionStorage.getItem('selectedMaterial') || 'ALL',
             selected_category: sessionStorage.getItem('selectedCategory') || 'ALL'

@@ -11,6 +11,8 @@ CREATE TABLE `choassys`.`product` (
   `icon_img` VARCHAR(255) NULL,
   `images` VARCHAR(800) NULL,
   `description` VARCHAR(1255) NULL,
+  `weight` VARCHAR(3) NULL,
+  `type` VARCHAR(3) NULL,
   `lastupdate` timestamp default current_timestamp,
   PRIMARY KEY (`id`));
 
@@ -58,6 +60,14 @@ CREATE TABLE `choassys`.`favourite` (
   `lastupdate` timestamp default current_timestamp,
   PRIMARY KEY (`id`));
 
+CREATE TABLE `choassys`.`pricing` (
+  `id` INT NOT NULL AUTO_INCREMENT ,
+  `type` VARCHAR(3) NULL,
+  `material` VARCHAR(45) NULL,
+  `price` FLOAT(12,2) NULL,
+  `lastupdate` timestamp default current_timestamp,
+  PRIMARY KEY (`id`));
+
 CREATE TABLE `choassys`.`advertisement` (
   `id` INT NOT NULL AUTO_INCREMENT ,
   `name` VARCHAR(45) NULL,
@@ -69,5 +79,7 @@ CREATE TABLE `choassys`.`advertisement` (
   `icon_img` VARCHAR(255) NULL,
   `images` VARCHAR(800) NULL,
   `description` VARCHAR(1255) NULL,
+  `weight` VARCHAR(3) NULL,
+  `type` VARCHAR(3) NULL,
   `lastupdate` timestamp default current_timestamp,
   PRIMARY KEY (`id`));

@@ -3052,7 +3052,7 @@ select[multiple].input-lg {
   
   padding: 8px 14px;
   position: relative;
-  border-radius: 20px;
+  border-radius: 20px !important;
   text-align: center;
   background-color: #fff;
   font-family: Verdana;

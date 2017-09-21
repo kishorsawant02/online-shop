@@ -46,7 +46,26 @@ router.delete('/category/delete/:id', function(req, res) {
         }
     });
 });
+// Get Products by id
+router.get('/category/:id', function(req, res) {
+    dbConnector.getConnection(function(error, connection) {
+        if (error) {
+            errorHandler.connectionError(error, connection, res);
+        } else {
+            var id = req.params.id;
+            var query = 'select * from favourite where id = \'' + id + '\';';
+            dbConnector.operation(query, connection, function(error, result, field) {
+                if (error) {
+                    errorHandler.queryError(error, res);
+                } else {
+                    res.status(200);
 
+                    res.send(result);
+                }
+            });
+        }
+    });
+});
 
 //get all latest product for dashboard Slider
 router.get('/latest', function(req, res) {
@@ -89,5 +108,24 @@ router.delete('/latest/delete/:id', function(req, res) {
         }
     });
 });
+// Get Products by id
+router.get('/latest/:id', function(req, res) {
+    dbConnector.getConnection(function(error, connection) {
+        if (error) {
+            errorHandler.connectionError(error, connection, res);
+        } else {
+            var id = req.params.id;
+            var query = 'select * from advertisement where id = \'' + id + '\';';
+            dbConnector.operation(query, connection, function(error, result, field) {
+                if (error) {
+                    errorHandler.queryError(error, res);
+                } else {
+                    res.status(200);
 
+                    res.send(result);
+                }
+            });
+        }
+    });
+});
 module.exports = router;

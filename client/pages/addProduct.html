@@ -41,17 +41,7 @@
                             <span class="input-group-addon">
                         <i class="glyphicon glyphicon-star"></i>
                     </span>
-                            <input minlength="4" maxlength="25" name="price" placeholder="Enter Price" class="form-control " type="number" value="{{product.price}}" required>
-                        </div>
-                    </div>
-                </div>
-                <div class="row form-group">
-                    <div class="col-sm-12">
-                        <div class="input-group">
-                            <span class="input-group-addon">
-                        <i class="glyphicon glyphicon-star"></i>
-                    </span>
-                            <input minlength="4" maxlength="25" name="discount amount" placeholder="Enter discount amount" class="form-control " type="number" value="{{product.discount}}" required>
+                            <input minlength="4" maxlength="25" name="discount amount" placeholder="Enter discount amount" class="form-control " type="text" value="{{product.discount}}" required>
                         </div>
                     </div>
                 </div>
@@ -81,7 +71,7 @@
                             <span class="input-group-addon">
                         <i class="glyphicon glyphicon-star"></i>
                     </span>
-                            <input type="url" placeholder="GOLD/SILVER/DIAMOND" value="{{product.material}}" class="form-control " name="icon_img" required>
+                            <ux-select options="{{material}}" selected_value="{{product.material}}" />
                         </div>
                     </div>
                 </div>
@@ -92,6 +82,26 @@
                         <i class="glyphicon glyphicon-star"></i>
                     </span>
                             <input type="url" placeholder="RING/NECKLACE" value="{{product.category}}" class="form-control " name="icon_img" required>
+                        </div>
+                    </div>
+                </div>
+                <div class="row form-group">
+                    <div class="col-sm-12">
+                        <div class="input-group">
+                            <span class="input-group-addon">
+                        <i class="glyphicon glyphicon-star"></i>
+                    </span>
+                            <ux-select options="{{type}}" selected_value="{{product.type}}" />
+                        </div>
+                    </div>
+                </div>
+                <div class="row form-group">
+                    <div class="col-sm-12">
+                        <div class="input-group">
+                            <span class="input-group-addon">
+                        <i class="glyphicon glyphicon-star"></i>
+                    </span>
+                            <input type="url" placeholder="10/23.1" value="{{product.weight}}" class="form-control " name="icon_img" required>
                         </div>
                     </div>
                 </div>
@@ -153,13 +163,16 @@
                 name: '',
                 specification: [],
                 discount: '',
-                price: '',
                 description: '',
-                material: '',
+                material: 'GOLD',
                 category: '',
                 icon_img: '',
+                weight:'',
+                type:'GO',
                 images: []
-            }
+            },
+            material: [{value: 'GOLD', text: 'GOLD' },{value: 'SILVER', text: 'SILVER' },{value: 'DIAMOND', text: 'DIAMOND' },{value: 'PLATINUM', text: 'PLATINUM' }],
+            type: [{value: 'GO', text: 'GO' },{value: 'SO', text: 'SO' },{value: 'DO', text: 'DO' },{value: 'PO', text: 'PO' },{value: 'GP', text: 'GP' },{value: 'SP', text: 'SP' },{value: 'DP', text: 'DP' },{value: 'PP', text: 'PP' }]
         },
         on: {
             saveProduct: function(event) {
@@ -177,11 +190,17 @@
                             self.setAlertData('Product Added Successfully, New Product Id is  :- ' + result.Customer_Order.productId, 'success');
                             self.set('product', {});
                             self.set('product.specification', []);
+                            self.set('product.material', 'GOLD');
+                            self.set('product.type', 'GO');
                             self.set('product.images', []);
                         },
                         error: function(response) {
                             var error = response.responseJSON;
-                            self.setAlertData(error.message + error.description, 'danger');
+                            if(error) {
+                                self.setAlertData(error.message + error.description, 'danger');
+                            } else {
+                                self.setAlertData('Error Occured', 'danger');
+                            }
                         }
                     });
 

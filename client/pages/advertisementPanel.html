@@ -21,23 +21,11 @@
         <ux-header></ux-header>
         <div class="container v-normal-bottom">
             <div class="v-normal row">
-                <span class="col-sm-3"><h1>Admin Panel </h1></span>
-                <span class="col-sm-9">
-                <a type="button" href="/addProduct.html" data-toggle="tooltip" title="Product Add" class="v-small-right button v-normal pull-right">Product <span class="glyphicon glyphicon-plus-sign" aria-hidden="true"></span>
+                <span class="col-sm-6"><h1>Advertisement Panel </h1></span>
+                <span class="col-sm-6">
+                    <a type="button" href="/addAdvertisement.html" class="button v-normal pull-right">Add Advertisement <span class="glyphicon glyphicon-plus-sign" aria-hidden="true"></span>
                 </a>
-                <a type="button" href="/userMgmtPanel.html"  data-toggle="tooltip" title="User Management!" style="min-width: unset;" class="button v-small-right  v-normal pull-right"><span class="glyphicon glyphicon-user" aria-hidden="true"></span>
-                </a>
-                 <a type="button" href="/orderPanel.html"  data-toggle="tooltip" title="Order Management!" style="min-width: unset;" class="button v-small-right  v-normal pull-right"><span class="glyphicon glyphicon-list-alt" aria-hidden="true"></span>
-                </a>
-                <a type="button" href="/costingPanel.html"  data-toggle="tooltip" title="Cost Update Panel!" style="min-width: unset;" class="button v-small-right  v-normal pull-right"><span class="glyphicon glyphicon-usd" aria-hidden="true"></span>
-                </a>
-                <a type="button" href="/feedbackPanel.html" data-toggle="tooltip" title="FeedBack Panel" style="min-width: unset;" class="button v-small-right  v-normal pull-right"><span class="glyphicon glyphicon-comment" aria-hidden="true"></span>
-                </a>
-                <a type="button" href="/advertisementPanel.html" data-toggle="tooltip" title="Advertisement Panel" style="min-width: unset;" class="button v-small-right  v-normal pull-right"><span class="glyphicon glyphicon-film" aria-hidden="true"></span>
-                </a>
-                <a type="button" href="/catalogPanel.html" style="min-width: unset;" data-toggle="tooltip" title="Catalog Panel" class="button v-small-right  v-normal pull-right"> <span class="glyphicon glyphicon-th-list" aria-hidden="true"></span>
-                </a>
-                <a type="button" href="/dashboard.html" data-toggle="tooltip" title="DashBoard Page"  class="button-icon v-small-right  v-normal v-normal-right pull-right"><span class="glyphicon glyphicon-home" aria-hidden="true"></span>
+                <a type="button" href="/adminDashboard.html" class="button-icon v-normal v-normal-right pull-right"><span class="glyphicon glyphicon-home" aria-hidden="true"></span>
                 </a>
                 </span>
             </div>
@@ -100,7 +88,7 @@
                 var self = this;
                 $.ajax({
                     method: "GET",
-                    url: "/product/",
+                    url: "/slider/latest",
                     success: function(result, model) {
                         if (result.length > 0) {
                             var column = Object.keys(result[0]);
@@ -120,14 +108,14 @@
             },
             editSpecification: function(event) {
                 sessionStorage.setItem('id', event.get('id'));
-                window.location.href = '/rathi/editProduct.html'
+                window.location.href = '/editAdvertisement.html'
             },
             deleteSpecification: function(event) {
                 var self = this;
                 var selectedProduct = event.get();
                 $.ajax({
                     method: "DELETE",
-                    url: "/product/delete/" + selectedProduct.id,
+                    url: "/slider/latest/delete/" + selectedProduct.id,
                     success: function(result, model) {
                         var products = self.get('products');
                         self.set('products', _.without(products, selectedProduct));
