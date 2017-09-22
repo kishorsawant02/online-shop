@@ -57,7 +57,7 @@
                         <div class="input-group"><span class="input-group-addon">
                         <i class="glyphicon glyphicon-star"></i>
                     </span>
-                            <input type="url" placeholder="GOLD/SILVER/DIAMOND" value="{{catalogItem.material}}" class="form-control input-md" name="icon_img" required>
+                            <ux-select options="{{material}}" selected_value="{{catalogItem.material}}" />
                         </div>
                     </div>
                 </div>
@@ -118,7 +118,8 @@
                 material:'',
                 discount:'',
                 icon_img:''
-            }
+            },
+            material: [{value: 'GOLD', text: 'GOLD' },{value: 'SILVER', text: 'SILVER' },{value: 'DIAMOND', text: 'DIAMOND' },{value: 'PLATINUM', text: 'PLATINUM' }]
         },
         on: {
             init: function(event) {

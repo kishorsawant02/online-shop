@@ -1,6 +1,6 @@
 var ux_image_url_box = [KEY] {{#each images:index}}
 <div class="v-normal-bottom col-sm-12 row ux-image-url-box">
-    <span class="col-sm-10"><input minlength="4" maxlength="100" placeholder="Enter Image Url" class="form-control" type="text" value="{{url}}"></span>
+    <span class="col-sm-10"><input minlength="4" maxlength="300" placeholder="Enter Image Url" class="form-control" type="text" value="{{url}}"></span>
     <span class="col-sm-2"><button type="button" on-click="removeImage" index="{{index}}" class="btn btn-danger">-</button></span>
 </div>
 {{/each}} [KEY];

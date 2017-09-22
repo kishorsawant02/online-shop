@@ -41,16 +41,6 @@
                             <span class="input-group-addon">
                         <i class="glyphicon glyphicon-star"></i>
                     </span>
-                            <input minlength="4" maxlength="25" name="discount amount" placeholder="Enter discount amount" class="form-control " type="text" value="{{product.discount}}" required>
-                        </div>
-                    </div>
-                </div>
-                <div class="row form-group">
-                    <div class="col-sm-12">
-                        <div class="input-group">
-                            <span class="input-group-addon">
-                        <i class="glyphicon glyphicon-star"></i>
-                    </span>
                             <textarea name="description" value="{{product.description}}" class="form-control" rows="8" cols="80" placeholder="Write description"></textarea>
                         </div>
                     </div>
@@ -162,7 +152,7 @@
             product: {
                 name: '',
                 specification: [],
-                discount: '',
+                discount: '1',
                 description: '',
                 material: 'GOLD',
                 category: '',

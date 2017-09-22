@@ -50,7 +50,7 @@
                 <thead>
                     <tr>
                         {{#each productColumn}}
-                        <th class="{{#if ((.).toUpperCase() == 'LASTUPDATE') || ((.).toUpperCase() =='SPECIFICATION') || ((.).toUpperCase() == 'IMAGES') || ((.).toUpperCase() == 'ICON_IMG')}} hide {{/if}}">
+                        <th class="{{#if ((.).toUpperCase() == 'LASTUPDATE') || ((.).toUpperCase() == 'DISCOUNT') ||((.).toUpperCase() =='SPECIFICATION') || ((.).toUpperCase() == 'IMAGES') || ((.).toUpperCase() == 'ICON_IMG')}} hide {{/if}}">
                             {{(.).toUpperCase()}}
                         </th>
                         {{/each}}
@@ -65,7 +65,7 @@
                         <td>{{price}}</td>
                         <td>{{category}}</td>
                         <td>{{material}}</td>
-                        <td>{{discount}}</td>
+                        <td class="hide">{{discount}}</td>
                         <td class="hide">{{specification}}</td>
                         <td class="hide">{{icon_img}}</td>
                         <td class="hide">{{images}}</td>
