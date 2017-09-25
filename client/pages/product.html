@@ -133,8 +133,13 @@
             },
             submitOrder: function() {
                 var self = this;
+                var product = JSON.parse(sessionStorage.getItem('product'));
+                delete product.specification;
+                delete product.icon_img;
+                delete product.images;
                 var customer = this.get('customer');
                 if (this.validatePayload(customer)) {
+                    customer['product'] = JSON.stringify(product);
                     $.ajax({
                         method: "POST",
                         data: customer,

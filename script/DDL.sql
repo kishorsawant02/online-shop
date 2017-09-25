@@ -6,7 +6,6 @@ CREATE TABLE `choassys`.`product` (
   `price` FLOAT(12,2) NULL,
   `category` VARCHAR(45) NULL,
   `material` VARCHAR(45) NULL,
-  `discount` INT NULL,
   `specification` VARCHAR(1500) NULL,
   `icon_img` VARCHAR(300) NULL,
   `images` VARCHAR(1500) NULL,
@@ -33,6 +32,7 @@ CREATE TABLE `choassys`.`customer` (
   `name` VARCHAR(45) NULL,
   `address` VARCHAR(45) NULL,
   `pan` VARCHAR(45) NULL,
+  `product` VARCHAR(1000) NULL,
   `user_id` VARCHAR(10) NOT NULL,
   `adhar` VARCHAR(45) NULL,
   `orderid` INT NOT NULL AUTO_INCREMENT,
@@ -65,6 +65,7 @@ CREATE TABLE `choassys`.`pricing` (
   `type` VARCHAR(3) NULL,
   `material` VARCHAR(45) NULL,
   `price` FLOAT(12,2) NULL,
+  `labourprice` FLOAT(12,2) NULL,
   `lastupdate` timestamp default current_timestamp,
   PRIMARY KEY (`id`));
 
@@ -74,7 +75,6 @@ CREATE TABLE `choassys`.`advertisement` (
   `price` FLOAT(12,2) NULL,
   `category` VARCHAR(45) NULL,
   `material` VARCHAR(45) NULL,
-  `discount` INT NULL,
   `specification` VARCHAR(1500) NULL,
   `icon_img` VARCHAR(255) NULL,
   `images` VARCHAR(1500) NULL,

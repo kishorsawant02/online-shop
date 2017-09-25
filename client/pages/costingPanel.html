@@ -28,18 +28,20 @@
             <div class="row form-group v-normal-bottom">
                 <div class="col-sm-12">
                     <div class="input-group" style="width: 100%;">
-                        <span style="width: 25%;font-weight: bold;" class="input-group-addon">Material</span>
-                        <span style="width: 25%;font-weight: bold;" class="input-group-addon">Type(O-Ornaments,P-Pure) </span>
-                        <span style="width: 25%;font-weight: bold;" class="input-group-addon">Price</span>
-                        <span style="width: 25%;font-weight: bold;" class="input-group-addon">lastUpdated</span>
+                        <span style="width: 20%;font-weight: bold;" class="input-group-addon">Material</span>
+                        <span style="width: 20%;font-weight: bold;" class="input-group-addon">Type(O-Ornaments,P-Pure) </span>
+                        <span style="width: 20%;font-weight: bold;" class="input-group-addon">Price</span>
+                        <span style="width: 20%;font-weight: bold;" class="input-group-addon">labour Price</span>
+                        <span style="width: 20%;font-weight: bold;" class="input-group-addon">lastUpdated</span>
                         <br>
                     </div>
                     {{#each pricing}}
                     <div class="input-group" style="width: 100%;">
-                        <span style="width: 25%;" class="input-group-addon">{{material}}</span>
-                        <span style="width: 25%;" class="input-group-addon">{{type}} </span>
-                        <span style="width: 25%;" class="input-group-addon">{{price}}</span>
-                        <span style="width: 25%;" class="input-group-addon">{{lastupdate}}</span>
+                        <span style="width: 20%;" class="input-group-addon">{{material}}</span>
+                        <span style="width: 20%;" class="input-group-addon">{{type}} </span>
+                        <span style="width: 20%;" class="input-group-addon">{{price}}</span>
+                        <span style="width: 20%;" class="input-group-addon">{{labourprice}}</span>
+                        <span style="width: 20%;" class="input-group-addon">{{lastupdate}}</span>
                         <br>
                     </div>
                     {{/each}}
@@ -166,7 +168,19 @@
                         <button type="button" on-click="saveCost" data-id="DO" class="button">Update</button>
                     </div>
                 </div>
-                
+                <div class="row form-group">
+                    <div class="col-sm-8">
+                        <div class="input-group">
+                            <span class="input-group-addon">
+                        <i class="glyphicon glyphicon-star"></i> Labour Price
+                    </span>
+                            <input minlength="4" maxlength="20" name="name" placeholder="Enter Price" class="form-control" type="text" value="{{price.labour}}" required>
+                        </div>
+                    </div>
+                    <div class="col-sm-3">
+                        <button type="button" on-click="saveLabourCost" class="button">Update</button>
+                    </div>
+                </div>
                 <div class="v-large-bottom">
                 </div>
             </div>
@@ -215,12 +229,37 @@
                         var updatedItem = result.data;
                         self.setAlertData('Price Has been saved successfully !!', 'success');
                         var pricing = self.get('pricing');
-                        var itemToUpdate = _.find(pricing, function(item){ return item.type == updatedItem.type;});
+                        var itemToUpdate = _.find(pricing, function(item) { return item.type == updatedItem.type; });
                         if (itemToUpdate) {
                             itemToUpdate.price = updatedItem.price;
                             itemToUpdate.lastupdate = 'Today'
                             self.set('pricing', pricing);
                         }
+                    },
+                    error: function(response) {
+                        var error = response.responseJSON;
+                        if (error) {
+                            self.setAlertData(error.message + error.description, 'danger');
+                        } else {
+                            self.setAlertData('Error Occured Please try after sometime.', 'danger');
+                        }
+                    }
+                });
+            },
+            saveLabourCost: function(event, context) {
+                var self = this;
+                var price = this.get('price.labour');
+                $.ajax({
+                    method: "POST",
+                    data: {'price':price},
+                    url: "/pricing/update/labourCharge/",
+                    success: function(result, model) {
+                        self.setAlertData('Labour Price Has been saved successfully !!', 'success');
+                        var pricing = self.get('pricing');
+                        _.each(pricing, function(price) {
+                            price.labourprice = self.get('price.labour');
+                        });
+                        self.set('pricing', pricing);
                     },
                     error: function(response) {
                         var error = response.responseJSON;

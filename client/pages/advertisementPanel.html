@@ -38,7 +38,7 @@
                 <thead>
                     <tr>
                         {{#each productColumn}}
-                        <th class="{{#if ((.).toUpperCase() == 'LASTUPDATE') || ((.).toUpperCase() == 'DISCOUNT') ||((.).toUpperCase() =='SPECIFICATION') || ((.).toUpperCase() == 'IMAGES') || ((.).toUpperCase() == 'ICON_IMG')}} hide {{/if}}">
+                        <th class="{{#if ((.).toUpperCase() == 'LASTUPDATE')  ||((.).toUpperCase() =='SPECIFICATION') || ((.).toUpperCase() == 'IMAGES') || ((.).toUpperCase() == 'ICON_IMG')}} hide {{/if}}">
                             {{(.).toUpperCase()}}
                         </th>
                         {{/each}}
@@ -53,7 +53,6 @@
                         <td>{{price}}</td>
                         <td>{{category}}</td>
                         <td>{{material}}</td>
-                        <td class="hide">{{discount}}</td>
                         <td class="hide">{{specification}}</td>
                         <td class="hide">{{icon_img}}</td>
                         <td class="hide">{{images}}</td>
@@ -72,7 +71,7 @@
                 </tbody>
             </table>
         </div>
-        <ux-footer style="{{#if products.length < 4}} position: absolute; {{/if}}"></ux-footer>
+        <ux-footer style="{{#if products.length < 2}} position: absolute; {{/if}}"></ux-footer>
         <ux-login type="{{false}}"></ux-login>
     </script>
     <script type="text/javascript">

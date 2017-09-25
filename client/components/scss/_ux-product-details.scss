@@ -10,13 +10,11 @@
     }
     .product-new-price {
         font-weight: bold;
-        font-size: 20px;
-    }
-    .product-old-price {
-        font-weight: lighter;
-        color: #e42c42;
-        font-size: 16px;
-        text-decoration: line-through;
+        font-size: 24px;
+        .details {
+            font-size: 14px;
+            color: #636B68;
+        }
     }
     .product-discount {
         font-weight: bold;

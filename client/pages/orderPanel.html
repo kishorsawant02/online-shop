@@ -38,11 +38,11 @@
                     <tr>
                         {{#each orderColumns}} {{#if ((.).toUpperCase() == 'PRODUCT_ID') }}
                         <th class="">
-                            PRODID
+                            P_ID
                         </th>
                         {{elseif ((.).toUpperCase() == 'ORDERID') }}
                         <th class="">
-                            ORDER
+                            O_ID
                         </th>
                         {{elseif ((.).toUpperCase() == 'USER_ID') }}
                         <th class="">
@@ -53,11 +53,10 @@
                             STATUS
                         </th>
                         {{else}}
-                        <th class="{{#if ((.).toUpperCase() == 'LASTUPDATE') }} hide {{/if}}">
+                        <th class="{{#if ((.).toUpperCase() == 'LASTUPDATE') ||((.).toUpperCase() == 'ADHAR')||((.).toUpperCase() == 'PRODUCT') }} hide {{/if}}">
                             {{(.).toUpperCase()}}
                         </th>
-                        {{/if}}
-                        {{/each}}
+                        {{/if}} {{/each}}
                         <th><span class="glyphicon glyphicon-cog" aria-hidden="true"></span></th>
                     </tr>
                 </thead>
@@ -72,11 +71,14 @@
                         <td>{{address}}</td>
                         <td>{{pan}}</td>
                         <td>{{user_id}}</td>
-                        <td>{{adhar}}</td>
+                        <td class="hide">{{adhar}}</td>
                         <td>{{orderid}}</td>
+                        <td class="hide">{{product}}</td>
                         <td class="hide">{{lastupdate}}</td>
                         <td align="center">
                             <span> <button type="button" on-click="deleteOrder" index="{{id}}" class="btn btn-danger v-normal-bottom"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></button>
+                            </span>
+                            <span> <button type="button" data-toggle="modal" data-target="#myModal" on-click="reviewOrder"  class="btn btn-default v-normal-bottom"><span class="glyphicon glyphicon-search" aria-hidden="true"></span></button>
                             </span>
                         </td>
                     </tr>
@@ -86,6 +88,28 @@
         </div>
         <ux-footer style="{{#if orders.length < 5}} position: absolute; {{/if}}"></ux-footer>
         <ux-login type="{{false}}"></ux-login>
+        <div id="myModal" class="modal fade" role="dialog">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title">Preview Order Details</h4>
+                    </div>
+                    <div class="modal-body main-container">
+                        {{#each reviewOrder:i}}
+                        <div class="row p-medium-bottom p-medium-top" style="border-bottom: 2px solid #F6F5F5;">
+                            <span class="col-sm-3"><b>{{@key.toUpperCase()}}</b></span>
+                            {{#if @key.toUpperCase() == 'PRODUCT'}}
+                                <span class="col-sm-9" style="word-wrap: break-word;">{{.}}</span>
+                            {{else}}
+                                <span class="col-sm-9" style="word-wrap: break-word;">{{JSON.stringify(.)}}</span>
+                            {{/if}}
+                        </div>
+                        {{/each}}
+                    </div>
+                </div>
+            </div>
+        </div>
     </script>
     <script type="text/javascript">
     Ractive({
@@ -93,7 +117,8 @@
         template: '#template',
         data: {
             orders: [],
-            alertData: null
+            alertData: null,
+            reviewOrder: null
         },
         on: {
             init: function() {
@@ -101,11 +126,11 @@
                 $.ajax({
                     method: "GET",
                     url: "/customer/orders",
-                    success: function(result, model) {
-                        if (result.length > 0) {
-                            var column = Object.keys(result[0]);
+                    success: function(results, model) {
+                        if (results.length > 0) {
+                            var column = Object.keys(results[0]);
                             self.set('orderColumns', column);
-                            self.set('orders', result);
+                            self.set('orders', results);
                             $('#orders').DataTable();
                             $('#orders')
                                 .removeClass('display')
@@ -134,6 +159,9 @@
                         self.setAlertData(error.message + error.description, 'danger');
                     }
                 });
+            },
+            reviewOrder: function(event) {
+                this.set('reviewOrder', event.get());
             }
         },
         setAlertData: function(msg, type) {

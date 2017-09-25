@@ -46,5 +46,25 @@ router.post('/update', function(req, res) {
         }
     });
 });
+router.post('/update/labourCharge/', function(req, res) {
+    dbConnector.getConnection(function(error, connection) {
+        if (error) {
+            errorHandler.connectionError(error, connection, res);
+        } else {
+            var price = req.body.price;
+            var query = 'SET SQL_SAFE_UPDATES=0;update pricing set labourprice= '+ price +';';
+            dbConnector.operation(query, connection, function(error, result, field) {
+                if (error) {
+                    errorHandler.queryError(error, res);
+                } else {
+                    res.status(200);
+                    res.send({
+                            status: 'OK'
+                    });
+                }
+            });
+        }
+    });
+});
 
 module.exports = router;
