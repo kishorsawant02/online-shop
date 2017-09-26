@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rathi</title>
+    <script type="text/javascript" src="/js/jQuery.min.js"></script>
+    <script type="text/javascript" src="/js/bootstrap.js"></script>
+    <script type="text/javascript" src="/js/bundle.js"></script>
+    <link rel="stylesheet" type="text/css" href="/css/bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="/css/main.css">
+</head>
+
+<body>
+    <div id="target"></div>
+    <script id="template" type="text/ractive">
+        <ux-header></ux-header>
+        <div class="row margin-zero">
+            <div class="container col-md-offset-3 col-md-6 col-sm-12 main-container">
+                <div class="row form-group v-normal">
+                    <div class="col-sm-12">
+                        <div class="input-group">
+                            <h1>  Edit Product Details !! </h1>
+                        </div>
+                    </div>
+                </div>
+                <div class="row form-group">
+                    <div class="col-sm-12">
+                        <div class="input-group">
+                            <span class="input-group-addon">
+                        <i class="glyphicon glyphicon-star"></i>
+                    </span>
+                            <input minlength="4" maxlength="20" name="name" placeholder="Enter Product Name" class="form-control input-md" type="text" value="{{product.name}}" required>
+                        </div>
+                    </div>
+                </div>
+                <div class="row form-group">
+                    <div class="col-sm-12">
+                        <div class="input-group"><span class="input-group-addon">
+                        <i class="glyphicon glyphicon-star"></i>
+                    </span>
+                            <input minlength="4" maxlength="25" name="price" placeholder="Enter Price" class="form-control input-md" type="number" value="{{product.price}}" required>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="row form-group">
+                    <div class="col-sm-12">
+                        <div class="input-group"><span class="input-group-addon">
+                        <i class="glyphicon glyphicon-star"></i>
+                    </span>
+                            <textarea name="description" value="{{product.description}}" class="form-control" rows="8" cols="80" placeholder="Write description"></textarea>
+                        </div>
+                    </div>
+                </div>
+                <div class="row form-group">
+                    <div class="col-sm-12">
+                        <div class="input-group"><span class="input-group-addon">
+                        <i class="glyphicon glyphicon-star"></i>
+                    </span>
+                            <input type="url" placeholder="icon_img" value="{{product.icon_img}}" class="form-control input-md" name="icon_img" required>
+                        </div>
+                    </div>
+                </div>
+                <div class="row form-group">
+                    <div class="col-sm-12">
+                        <div class="input-group"><span class="input-group-addon">
+                        <i class="glyphicon glyphicon-star"></i>
+                    </span>
+                            <ux-select options="{{material}}" selected_value="{{product.material}}" />
+                        </div>
+                    </div>
+                </div>
+                <div class="row form-group">
+                    <div class="col-sm-12">
+                        <div class="input-group"><span class="input-group-addon">
+                        <i class="glyphicon glyphicon-star"></i>
+                    </span>
+                            <input type="url" placeholder="RING?NECKLACE" value="{{product.category}}" class="form-control input-md" name="icon_img" required>
+                        </div>
+                    </div>
+                </div>
+                <div class="row form-group">
+                    <div class="col-sm-12">
+                        <div class="input-group">
+                            <span class="input-group-addon">
+                        <i class="glyphicon glyphicon-star"></i>
+                    </span>
+                            <ux-select options="{{type}}" selected_value="{{product.type}}" />
+                        </div>
+                    </div>
+                </div>
+                <div class="row form-group">
+                    <div class="col-sm-12">
+                        <div class="input-group">
+                            <span class="input-group-addon">
+                        <i class="glyphicon glyphicon-star"></i>
+                    </span>
+                            <input type="url" placeholder="10/23.1" value="{{product.weight}}" class="form-control " name="icon_img" required>
+                        </div>
+                    </div>
+                </div>
+                <div class="row v-normal">
+                    <div class="input-group v-normal-bottom">
+                        <span class="col-sm-6"><h4>Specification</h4></span>
+                        <span class="col-sm-6"><button type="button" on-click="addSpecification" class="btn btn-success">+</button></span>
+                    </div>
+                    <ux-specification-box specification="{{product.specification}}"></ux-specification-box>
+                </div>
+                <div class="row v-normal">
+                    <div class="input-group v-normal-bottom">
+                        <span class="col-sm-6"><h4>Images</h4></span>
+                        <span class="col-sm-6"><button type="button" on-click="addImages" class="btn btn-success">+</button></span>
+                    </div>
+                    <ux-image-url-box images="{{product.images}}"></ux-image-url-box>
+                </div>
+                <div class="">
+                    <ux-alert alertData="{{alertData}}"></ux-alert>
+                </div>
+                <div class="v-large-bottom">
+                    <button type="button" on-click="saveProduct" class="button">Submit</button>
+                    <a type="button" href="/adminDashboard.html" class="button-icon pull-right v-large-left"> <span>
+                        <i class="glyphicon glyphicon-th-list"></i>
+                    </span> </a>
+                    <button type="button" class="button-icon " data-toggle="modal" data-target="#myModal"><span>
+                        <i class="glyphicon glyphicon-search"></i>
+                    </span></button>
+                </div>
+                <div id="myModal" class="modal fade" role="dialog">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                <h4 class="modal-title">Preview Product Details</h4>
+                            </div>
+                            <div class="modal-body main-container">
+                                {{#each product:i}}
+                                <div class="row p-medium-bottom p-medium-top" style="border-bottom: 2px solid #F6F5F5;">
+                                    <span class="col-sm-3"><b>{{@key.toUpperCase()}}</b></span>
+                                    <span class="col-sm-9" style="word-wrap: break-word;">{{JSON.stringify(.)}}</span>
+                                </div>
+                                {{/each}}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <ux-footer></ux-footer>
+        <ux-login type="{{false}}"></ux-login>
+    </script>
+    <script type="text/javascript">
+    Ractive({
+        target: '#target',
+        template: '#template',
+        data: {
+            product: {
+                name: '',
+                specification: [],
+                price: '',
+                description: '',
+                material: '',
+                category: '',
+                icon_img: '',
+                weight:'',
+                type:'',
+                images: []
+            },
+             material: [{value: 'GOLD', text: 'GOLD' },{value: 'SILVER', text: 'SILVER' },{value: 'DIAMOND', text: 'DIAMOND' },{value: 'PLATINUM', text: 'PLATINUM' }],
+             type: [{value: 'GO', text: 'GO' },{value: 'SO', text: 'SO' },{value: 'DO', text: 'DO' },{value: 'PO', text: 'PO' },{value: 'GP', text: 'GP' },{value: 'SP', text: 'SP' },{value: 'DP', text: 'DP' },{value: 'PP', text: 'PP' }]
+        },
+        on: {
+            init: function(event) {
+                var id = sessionStorage.getItem('id');
+                var self = this;
+                $.ajax({
+                    method: "GET",
+                    url: "/product/" + id,
+                    success: function(result, model) {
+                        if (result.length > 0) {
+                            result = result[0];
+                            result.specification = JSON.parse(result.specification) || [];
+                            result.images = JSON.parse(result.images) || [];
+                            self.set('product', result);
+                        }
+                    },
+                    error: function(response) {
+                        var error = response.responseJSON;
+                        if (error) {
+                            self.setAlertData(error.message + error.description, 'danger');
+                        } else {
+                            self.setAlertData('No Item Found', 'danger');
+                        }
+                    }
+                });
+            },
+            saveProduct: function(event) {
+                var self = this;
+                this.setAlertData();
+                var payload = this.get('product');
+                delete payload.lastupdate;
+                if (this.validatePayload(payload)) {
+                    payload.material = payload.material.toUpperCase();
+                    payload.category = payload.category.toUpperCase();
+                    $.ajax({
+                        method: "POST",
+                        data: payload,
+                        url: "/product/update/" + payload.id,
+                        success: function(result, model) {
+                            self.setAlertData('Product Updated Successfully', 'success');
+                        },
+                        error: function(response) {
+                            var error = response.responseJSON;
+                            
+                            self.setAlertData(error.message + error.description, 'danger');
+                        }
+                    });
+
+                } else {
+                    this.setAlertData('Please enter all details', 'danger');
+                }
+            },
+            addSpecification: function() {
+                this.set('product.specification', this.get('product.specification').concat({ key: '', value: '' }));
+            },
+            addImages: function() {
+                this.set('product.images', this.get('product.images').concat({ url: '' }));
+            }
+        },
+        setAlertData: function(msg, type) {
+            this.set('alertData.msg', msg);
+            this.set('alertData.type', type);
+        },
+        validatePayload: function(payload) {
+            var isValid = true;
+            for (var i in payload) {
+                if (typeof payload[i] == 'object') {
+                    payload[i] = (payload[i].length > 0) ? JSON.stringify(payload[i]) : payload[i];
+                }
+                if (!payload[i] && isValid) { isValid = false; break; }
+            }
+            return isValid;
+        }
+    });
+    </script>
+</body>
+
+</html>

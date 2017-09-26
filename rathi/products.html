@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rathi</title>
+    <script type="text/javascript" src="/js/jQuery.min.js"></script>
+    <script type="text/javascript" src="/js/bootstrap.js"></script>
+    <script type="text/javascript" src="/js/loadash.js"></script>
+    <script type="text/javascript" src="/js/bundle.js"></script>
+    <link rel="stylesheet" type="text/css" href="/css/bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="/css/main.css">
+</head>
+
+<body>
+    <div id="target"></div>
+    <script id="template" type="text/ractive">
+        <ux-header></ux-header>
+        <div class="container v-normal">
+            <div class="form-group v-medium">
+                <div class="col-sm-10">
+                    <h1> Product Catalog </h1>
+                </div>
+                <div class="col-sm-2">
+                    <a type="button" href="/dashboard.html" class="button-icon v-normal v-normal-right pull-right">
+                    <span class="glyphicon glyphicon-home" aria-hidden="true"></span></a>
+                </div>
+            </div>
+            <div class="v-normal-bottom row">
+                <span class="col-sm-offset-6 col-sm-3">
+                    <div class="input-group">
+                        <span class="input-group-addon">
+                         <i class="glyphicon glyphicon-filter"></i>
+                     </span>
+                <ux-select options="{{material}}" selected_value="{{selected_material}}"></ux-select>
+            </div>
+            </span>
+            <span class="col-sm-3">
+                    <div class="input-group">
+                        <span class="input-group-addon">
+                         <i class="glyphicon glyphicon-filter"></i>
+                        </span>
+            <ux-select options="{{category}}" selected_value="{{selected_category}}"></ux-select>
+        </div>
+        </span>
+        </div>
+        </div>
+        <div class="container">
+            <ux-alert alertData="{{alertData}}"></ux-alert>
+        </div>
+        <div class="container p-large-bottom" style="background-color: transparent; ">
+            <ux-product-catalog products="{{products}}"></ux-product-catalog>
+        </div>
+        <ux-footer></ux-footer>
+        <ux-login></ux-login>
+    </script>
+    <script type="text/javascript">
+    Ractive({
+        target: '#target',
+        template: '#template',
+        data: {
+            allProducts: [],
+            products: [],
+            material: [{value: 'ALL', text: 'ALL' },{value: 'GOLD', text: 'GOLD' },{value: 'SILVER', text: 'SILVER' },{value: 'DIAMOND', text: 'DIAMOND' },{value: 'PLATINUM', text: 'PLATINUM' }],
+            category: JSON.parse(sessionStorage.getItem('category')),
+            selected_material: sessionStorage.getItem('selectedMaterial') || 'ALL',
+            selected_category: sessionStorage.getItem('selectedCategory') || 'ALL'
+        },
+        on: {
+            init: function() {
+                var self = this;
+                $.ajax({
+                    method: "GET",
+                    url: "/product/",
+                    success: function(results, model) {
+                        if (results.length > 0) {
+                            _.each(results, function(result) {
+                                result.specification = JSON.parse(result.specification);
+                                result.images = JSON.parse(result.images);
+                            });
+                            self.set('products', results);
+                            self.set('allProducts', results);
+                        }
+                    },
+                    error: function(response) {
+                        var error = response.responseJSON;
+                        self.setAlertData(error.message + error.description, 'danger');
+                    }
+                });
+            },
+            complete: function() {
+                this.observe('selected_material', function(newValue) {
+                    if (newValue) {
+                        this.filterData(newValue, this.get('selected_category'));
+                    }
+                });
+                this.observe('selected_category', function(newValue) {
+                    if (newValue) {
+                        this.filterData(this.get('selected_material'), newValue);
+                    }
+                });
+            }
+        },
+        filterData: function(material, category) {
+            var products = _.filter(this.get('allProducts'), function(product) {
+                if (material == 'ALL') {
+                    if (category == 'ALL') {
+                        return product;
+                    } else {
+                        return product.category == category;
+                    }
+                } else if (category == 'ALL') {
+                    if (material == 'ALL') {
+                        return product;
+                    } else {
+                        return product.material == material;
+                    }
+                } else {
+                    return product.category == category && product.material == material;
+                }
+
+            });
+            this.set('products', products);
+        },
+        setAlertData: function(msg, type) {
+            this.set('alertData.msg', msg);
+            this.set('alertData.type', type);
+        }
+    });
+    </script>
+</body>
+
+</html>

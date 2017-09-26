@@ -76,7 +76,8 @@ router.post('/login', function(req, res) {
     getUserDetails(req, res, data, function(result) {
         var result = result[0];
         if (result.password == data.password) {
-            if (result.location == data.location) {
+            //if (result.location == data.location) {
+            if (true) {
                 res.status(200);
                 res.send({
                     User: {

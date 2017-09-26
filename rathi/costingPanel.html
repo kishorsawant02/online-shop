@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rathi</title>
+    <script type="text/javascript" src="/js/jQuery.min.js"></script>
+    <script type="text/javascript" src="/js/bootstrap.js"></script>
+    <script type="text/javascript" src="/js/bundle.js"></script>
+    <script type="text/javascript" src="/js/loadash.js"></script>
+    <link rel="stylesheet" type="text/css" href="/css/bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="/css/main.css">
+</head>
+
+<body>
+    <div id="target"></div>
+    <script id="template" type="text/ractive">
+        <ux-header></ux-header>
+        <div class="container col-md-offset-2 col-md-8 col-sm-12 main-container v-normal-bottom">
+            <div class="row form-group">
+                <div class="col-sm-10">
+                    <div class="input-group">
+                        <h3> Old Price!! </h3>
+                    </div>
+                </div>
+            </div>
+            <div class="row form-group v-normal-bottom">
+                <div class="col-sm-12">
+                    <div class="input-group" style="width: 100%;">
+                        <span style="width: 20%;font-weight: bold;" class="input-group-addon">Material</span>
+                        <span style="width: 20%;font-weight: bold;" class="input-group-addon">Type(O-Ornaments,P-Pure) </span>
+                        <span style="width: 20%;font-weight: bold;" class="input-group-addon">Price</span>
+                        <span style="width: 20%;font-weight: bold;" class="input-group-addon">labour Price</span>
+                        <span style="width: 20%;font-weight: bold;" class="input-group-addon">lastUpdated</span>
+                        <br>
+                    </div>
+                    {{#each pricing}}
+                    <div class="input-group" style="width: 100%;">
+                        <span style="width: 20%;" class="input-group-addon">{{material}}</span>
+                        <span style="width: 20%;" class="input-group-addon">{{type}} </span>
+                        <span style="width: 20%;" class="input-group-addon">{{price}}</span>
+                        <span style="width: 20%;" class="input-group-addon">{{labourprice}}</span>
+                        <span style="width: 20%;" class="input-group-addon">{{lastupdate}}</span>
+                        <br>
+                    </div>
+                    {{/each}}
+                </div>
+            </div>
+        </div>
+        <div class="row margin-zero">
+            <div class="container col-md-offset-2 col-md-8 col-sm-12 main-container">
+                <div class="row form-group v-normal">
+                    <div class="col-sm-10">
+                        <div class="input-group">
+                            <h3>  Costing Panel !! </h3>
+                        </div>
+                    </div>
+                    <div class="col-sm-2">
+                        <a type="button" href="/adminDashboard.html" class="button-icon pull-right v-large-left"> <span>
+                        <i class="glyphicon glyphicon-th-list"></i>
+                    </span> </a></div>
+                </div>
+                <div class="">
+                    <ux-alert alertData="{{alertData}}"></ux-alert>
+                </div>
+                <div class="row form-group">
+                    <div class="col-sm-8">
+                        <div class="input-group">
+                            <span class="input-group-addon">
+                        <i class="glyphicon glyphicon-star"></i> Gold Ornaments (GO)
+                    </span>
+                            <input minlength="4" maxlength="20" name="name" placeholder="Enter Price" class="form-control" type="text" value="{{price.GOprice}}" required>
+                        </div>
+                    </div>
+                    <div class="col-sm-3">
+                        <button type="button" on-click="saveCost" data-id="GO" class="button">Update</button>
+                    </div>
+                </div>
+                <div class="row form-group">
+                    <div class="col-sm-8">
+                        <div class="input-group">
+                            <span class="input-group-addon">
+                        <i class="glyphicon glyphicon-star"></i>Gold Pure  (GP)
+                    </span>
+                            <input minlength="4" maxlength="20" name="name" placeholder="Enter Price" class="form-control" type="text" value="{{price.GPprice}}" required>
+                        </div>
+                    </div>
+                    <div class="col-sm-3">
+                        <button type="button" on-click="saveCost" data-id="GP" class="button">Update</button>
+                    </div>
+                </div>
+                <div class="row form-group">
+                    <div class="col-sm-8">
+                        <div class="input-group">
+                            <span class="input-group-addon">
+                        <i class="glyphicon glyphicon-star"></i> Silver Pure (SP)
+                    </span>
+                            <input minlength="4" maxlength="20" name="name" placeholder="Enter Price" class="form-control" type="text" value="{{price.SPprice}}" required>
+                        </div>
+                    </div>
+                    <div class="col-sm-3">
+                        <button type="button" on-click="saveCost" data-id="SP" class="button">Update</button>
+                    </div>
+                </div>
+                <div class="row form-group">
+                    <div class="col-sm-8">
+                        <div class="input-group">
+                            <span class="input-group-addon">
+                        <i class="glyphicon glyphicon-star"></i> Silver Ornaments(SO)
+                    </span>
+                            <input minlength="4" maxlength="20" name="name" placeholder="Enter Price" class="form-control" type="text" value="{{price.SOprice}}" required>
+                        </div>
+                    </div>
+                    <div class="col-sm-3">
+                        <button type="button" on-click="saveCost" data-id="SO" class="button">Update</button>
+                    </div>
+                </div>
+                <div class="row form-group">
+                    <div class="col-sm-8">
+                        <div class="input-group">
+                            <span class="input-group-addon">
+                        <i class="glyphicon glyphicon-star"></i> Platinum Pure  (PP)
+                    </span>
+                            <input minlength="4" maxlength="20" name="name" placeholder="Enter Price" class="form-control" type="text" value="{{price.PPprice}}" required>
+                        </div>
+                    </div>
+                    <div class="col-sm-3">
+                        <button type="button" on-click="saveCost" data-id="PP" class="button">Update</button>
+                    </div>
+                </div>
+                <div class="row form-group">
+                    <div class="col-sm-8">
+                        <div class="input-group">
+                            <span class="input-group-addon">
+                        <i class="glyphicon glyphicon-star"></i> Platinum Ornaments (PO)
+                    </span>
+                            <input minlength="4" maxlength="20" name="name" placeholder="Enter Price" class="form-control" type="text" value="{{price.POprice}}" required>
+                        </div>
+                    </div>
+                    <div class="col-sm-3">
+                        <button type="button" on-click="saveCost" data-id="PO" class="button">Update</button>
+                    </div>
+                </div>
+                <div class="row form-group">
+                    <div class="col-sm-8">
+                        <div class="input-group">
+                            <span class="input-group-addon">
+                        <i class="glyphicon glyphicon-star"></i> Diamond Pure (DP) 
+                    </span>
+                            <input minlength="4" maxlength="20" name="name" placeholder="Enter Price" class="form-control" type="text" value="{{price.DPprice}}" required>
+                        </div>
+                    </div>
+                    <div class="col-sm-3">
+                        <button type="button" on-click="saveCost" data-id="DP" class="button">Update</button>
+                    </div>
+                </div>
+                <div class="row form-group">
+                    <div class="col-sm-8">
+                        <div class="input-group">
+                            <span class="input-group-addon">
+                        <i class="glyphicon glyphicon-star"></i> Diamond Ornaments (DO)
+                    </span>
+                            <input minlength="4" maxlength="20" name="name" placeholder="Enter Price" class="form-control" type="text" value="{{price.DOprice}}" required>
+                        </div>
+                    </div>
+                    <div class="col-sm-3">
+                        <button type="button" on-click="saveCost" data-id="DO" class="button">Update</button>
+                    </div>
+                </div>
+                <div class="row form-group">
+                    <div class="col-sm-8">
+                        <div class="input-group">
+                            <span class="input-group-addon">
+                        <i class="glyphicon glyphicon-star"></i> Labour Price
+                    </span>
+                            <input minlength="4" maxlength="20" name="name" placeholder="Enter Price" class="form-control" type="text" value="{{price.labour}}" required>
+                        </div>
+                    </div>
+                    <div class="col-sm-3">
+                        <button type="button" on-click="saveLabourCost" class="button">Update</button>
+                    </div>
+                </div>
+                <div class="v-large-bottom">
+                </div>
+            </div>
+        </div>
+        <ux-footer></ux-footer>
+        <ux-login type="{{false}}"></ux-login>
+    </script>
+    <script type="text/javascript">
+    Ractive({
+        target: '#target',
+        template: '#template',
+        data: {
+            pricing: [],
+            price: {}
+        },
+        on: {
+            init: function() {
+                var self = this;
+                $.ajax({
+                    method: "GET",
+                    url: "/pricing/",
+                    success: function(results, model) {
+                        if (results.length > 0) {
+                            self.set('pricing', results);
+                        }
+                    },
+                    error: function(response) {
+                        var error = response.responseJSON;
+                        self.setAlertData(error.message + error.description, 'danger');
+                    }
+                });
+            },
+            saveCost: function(event, context) {
+                var self = this;
+                var id = event.event.currentTarget.dataset.id;
+                var price = this.get('price');
+                var payload = {
+                    type: id,
+                    price: price[(id + 'price')]
+                };
+                $.ajax({
+                    method: "POST",
+                    data: payload,
+                    url: "/pricing/update",
+                    success: function(result, model) {
+                        var updatedItem = result.data;
+                        self.setAlertData('Price Has been saved successfully !!', 'success');
+                        var pricing = self.get('pricing');
+                        var itemToUpdate = _.find(pricing, function(item) { return item.type == updatedItem.type; });
+                        if (itemToUpdate) {
+                            itemToUpdate.price = updatedItem.price;
+                            itemToUpdate.lastupdate = 'Today'
+                            self.set('pricing', pricing);
+                        }
+                    },
+                    error: function(response) {
+                        var error = response.responseJSON;
+                        if (error) {
+                            self.setAlertData(error.message + error.description, 'danger');
+                        } else {
+                            self.setAlertData('Error Occured Please try after sometime.', 'danger');
+                        }
+                    }
+                });
+            },
+            saveLabourCost: function(event, context) {
+                var self = this;
+                var price = this.get('price.labour');
+                $.ajax({
+                    method: "POST",
+                    data: {'price':price},
+                    url: "/pricing/update/labourCharge/",
+                    success: function(result, model) {
+                        self.setAlertData('Labour Price Has been saved successfully !!', 'success');
+                        var pricing = self.get('pricing');
+                        _.each(pricing, function(price) {
+                            price.labourprice = self.get('price.labour');
+                        });
+                        self.set('pricing', pricing);
+                    },
+                    error: function(response) {
+                        var error = response.responseJSON;
+                        if (error) {
+                            self.setAlertData(error.message + error.description, 'danger');
+                        } else {
+                            self.setAlertData('Error Occured Please try after sometime.', 'danger');
+                        }
+                    }
+                });
+            }
+        },
+        setAlertData: function(msg, type) {
+            this.set('alertData.msg', msg);
+            this.set('alertData.type', type);
+        }
+    });
+    </script>
+</body>
+
+</html>

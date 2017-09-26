@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rathi</title>
+    <script type="text/javascript" src="/js/jQuery.min.js"></script>
+    <script type="text/javascript" src="/js/bootstrap.js"></script>
+    <script type="text/javascript" src="/js/bundle.js"></script>
+    <script type="text/javascript" src="/js/loadash.js"></script>
+    <script type="text/javascript" src="/js/datatables.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="/css/bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="/css/main.css">
+    <link rel="stylesheet" type="text/css" href="/css/datatables.min.css" />
+</head>
+
+<body>
+    <div id="target"></div>
+    <script id="template" type="text/ractive">
+        <ux-header></ux-header>
+        <div class="container v-normal-bottom">
+            <div class="v-normal row">
+                <span class="col-sm-6"><h1>FeedBack Panel </h1></span>
+                <span class="col-sm-6">
+                    <a type="button" href="/adminDashboard.html" class="button-icon v-normal v-normal-right pull-right"><span class="glyphicon glyphicon-home" aria-hidden="true"></span></a>
+                </span>
+            </div>
+            <div class="v-normal">
+                <ux-alert class="v-normal" alertData="{{alertData}}"></ux-alert>
+            </div>
+        </div>
+        <div class="container p-normal-top p-normal-bottom">
+            <table id="feedbacks" class="display" cellspacing="0" width="100%">
+                <thead>
+                    <tr>
+                        {{#each feedbackColumn}}
+                        <th class="{{#if ((.).toUpperCase() == 'LASTUPDATE')}} hide {{/if}}">
+                            {{(.).toUpperCase()}}
+                        </th>
+                        {{/each}}
+                        <th><span class="glyphicon glyphicon-cog" aria-hidden="true"></span></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {{#each feedbackData}}
+                    <tr>
+                        <td>{{id}}</td>
+                        <td>{{name}}</td>
+                        <td>{{msg}}</td>
+                        <td>{{mobile}}</td>
+                        <td>{{address}}</td>
+                        <td class="hide">{{lastupdate}}</td>
+                        <td align="center">
+                            <span> <button type="button" on-click="deleteFeedback" index="{{id}}" class="btn btn-danger v-normal-bottom"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></button>
+                            </span>
+                        </td>
+                    </tr>
+                    {{/each}}
+                </tbody>
+            </table>
+        </div>
+        <ux-footer style="{{#if feedbackData.length < 2}} position: absolute; {{/if}}"></ux-footer>
+        <ux-login type="{{false}}"></ux-login>
+    </script>
+    <script type="text/javascript">
+    Ractive({
+        target: '#target',
+        template: '#template',
+        data: {
+            feedbackData: [],
+            alertData: null
+        },
+        on: {
+            init: function() {
+                var self = this;
+                $.ajax({
+                    method: "GET",
+                    url: "/feedback/",
+                    success: function(result, model) {
+                        if (result.length > 0) {
+                            var column = Object.keys(result[0]);
+                            self.set('feedbackColumn', column);
+                            self.set('feedbackData', result);
+                            $('#feedbacks').DataTable();
+                            $('#feedbacks')
+                                .removeClass('display')
+                                .addClass('table table-striped table-bordered');
+                        }
+                    },
+                    error: function(response) {
+                        var error = response.responseJSON;
+                        self.setAlertData(error.message + error.description, 'danger');
+                    }
+                });
+            },
+            deleteFeedback: function(event) {
+                var self = this;
+                var selectedFeedback = event.get();
+                $.ajax({
+                    method: "DELETE",
+                    url: "/feedback/delete/" + selectedFeedback.id,
+                    success: function(result, model) {
+                        var feedbackData = self.get('feedbackData');
+                        self.set('feedbackData', _.without(feedbackData, selectedFeedback));
+                        self.setAlertData('<b>Item Deleted : ' + selectedFeedback.id + '</b>', 'success');
+                    },
+                    error: function(response) {
+                        var error = response.responseJSON;
+                        self.setAlertData(error.message + error.description, 'danger');
+                    }
+                });
+            }
+        },
+        setAlertData: function(msg, type) {
+            this.set('alertData.msg', msg);
+            this.set('alertData.type', type);
+        }
+    });
+    </script>
+</body>
+
+</html>

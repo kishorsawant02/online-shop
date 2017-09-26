@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rathi</title>
+    <script type="text/javascript" src="/js/jQuery.min.js"></script>
+    <script type="text/javascript" src="/js/bootstrap.js"></script>
+    <script type="text/javascript" src="/js/bundle.js"></script>
+    <script type="text/javascript" src="/js/loadash.js"></script>
+    <link rel="stylesheet" type="text/css" href="/css/bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="/css/main.css">
+</head>
+
+<body>
+    <div id="target"></div>
+    <script id="template" type="text/ractive">
+        <ux-header></ux-header>
+        <div class="container v-normal">
+            <div class="form-group v-medium">
+                <div class="col-sm-10">
+                    <h1> Product Details </h1>
+                </div>
+                <div class="col-sm-2">
+                    <a type="button" href="/dashboard.html" class="button-icon v-normal v-normal-right pull-right">
+                    <span class="glyphicon glyphicon-home" aria-hidden="true"></span></a>
+                </div>
+            </div>
+        </div>
+        <div class="container v-normal">
+            <div class="row v-normal">
+                <span class="col-md-5">
+                    <ux-image-gallery images="{{product.images}}"> </ux-image-gallery>
+                </span>
+                <span class="col-md-7">
+                    <div class="v-normal-top"><i><a href="/dashboard.html">HOME  </a> > <a href="/products.html">{{product.material}}</a> > <a href="/products.html">{{product.category}}</a></i></div>
+                    <ux-product-details  product="{{product}}"></ux-product-details>
+                </span>
+            </div>
+        </div>
+        <div class="container main-container">
+            <div class="row p-large-bottom">
+                <div class="col-sm-12">
+                    <ux-prouct-specification product="{{product}}"></ux-prouct-specification>
+                </div>
+            </div>
+        </div>
+        <div id="myModal" class="modal fade" role="dialog">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title">Fill Your Details</h4>
+                    </div>
+                    <div class="modal-body main-container">
+                        <div class="row form-group">
+                            <div class="col-sm-12">
+                                <div class="input-group">
+                                    <span class="input-group-addon"><i class="glyphicon glyphicon-phone"></i></span>
+                                    <input id="mobile" minlength="10" maxlength="10" name="username" placeholder="Enter Mobile Number" class="form-control input-md" type="text" value="{{customer.mobile}}" required>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row form-group">
+                            <div class="col-sm-12">
+                                <div class="input-group">
+                                    <span class="input-group-addon"><i class="glyphicon glyphicon-star"></i></span>
+                                    <input id="mobile" minlength="6" maxlength="15" name="username" placeholder="Enter Name" class="form-control input-md" type="text" value="{{customer.name}}" required>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row form-group">
+                            <div class="col-sm-12">
+                                <div class="input-group">
+                                    <span class="input-group-addon"><i class="glyphicon glyphicon-globe"></i></span>
+                                    <input id="mobile" minlength="6" maxlength="15" name="username" placeholder="Enter Address" class="form-control input-md" type="text" value="{{customer.address}}" required>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row form-group">
+                            <div class="col-sm-12">
+                                <div class="input-group">
+                                    <span class="input-group-addon"><i class="glyphicon glyphicon-star"></i></span>
+                                    <input id="mobile" minlength="6" maxlength="15" name="username" placeholder="Enter PAN" class="form-control input-md" type="text" value="{{customer.pan}}" required>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row form-group">
+                            <div class="col-sm-12">
+                                <div class="input-group">
+                                    <span class="input-group-addon"><i class="glyphicon glyphicon-star"></i></span>
+                                    <input id="mobile" minlength="6" maxlength="15" name="username" placeholder="Enter Adhar" class="form-control input-md" type="text" value="{{customer.adhar}}" required>
+                                </div>
+                            </div>
+                        </div>
+                        <ux-alert alertData="{{alertData}}" successMsg="{{successMsg}}"></ux-alert>
+                        <div class="form-group v-normal">
+                            <button type="button" on-click="submitOrder" class="button">Place Order</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div style="position: fixed;bottom: 138px;right: 8px;">
+            <a type="button" href="/feedback.html" class="button-icon">FeedBack</a>
+        </div>
+        <ux-footer></ux-footer>
+        <ux-login></ux-login>
+    </script>
+    <script type="text/javascript">
+    Ractive({
+        target: '#target',
+        template: '#template',
+        data: {
+            product: {},
+            customer: {},
+            successMsg: null
+        },
+        on: {
+            init: function() {
+                var product = JSON.parse(sessionStorage.getItem('product'));
+                if (typeof product.images == 'string') {
+                    product.images = JSON.parse(product.images);
+                }
+                if (typeof product.specification == 'string') {
+                    product.specification = JSON.parse(product.specification);
+                }
+                this.set('product', product);
+                this.set('customer.product_id', product.id);
+                this.set('customer.user_id', sessionStorage.getItem('username'));
+            },
+            submitOrder: function() {
+                var self = this;
+                var product = JSON.parse(sessionStorage.getItem('product'));
+                delete product.specification;
+                delete product.icon_img;
+                delete product.images;
+                var customer = this.get('customer');
+                if (this.validatePayload(customer)) {
+                    customer['product'] = JSON.stringify(product);
+                    $.ajax({
+                        method: "POST",
+                        data: customer,
+                        url: "/customer/order",
+                        success: function(result, model) {
+                            self.set('successMsg', 'Order has been Placed successfully <br/><br/>\n <b>Order Id : ' + result.Customer_Order.orderId + '</b><br/> <br/>Please remember all Order Id.<br>Message will be close After <b>7sec </b>.<br>Enjoy Shopping !!! ');
+                            window.setTimeout(function (){
+                                window.location.href = '/products.html';
+                            },7000);
+
+                        },
+                        error: function(response) {
+                            var error = response.responseJSON;
+                            self.setAlertData(error.message + error.description, 'danger');
+                        }
+                    });
+                } else {
+                    this.setAlertData('Please enter all details', 'danger');
+                }
+            }
+        },
+        setAlertData: function(msg, type) {
+            this.set('alertData.msg', msg);
+            this.set('alertData.type', type);
+        },
+        validatePayload: function(payload) {
+            var isValid = true;
+            for (var i in payload) {
+                if (typeof payload[i] == 'object') {
+                    payload[i] = (payload[i].length > 0) ? JSON.stringify(payload[i]) : payload[i];
+                }
+                if (!payload[i] && isValid) { isValid = false; break; }
+            }
+            return isValid;
+        }
+    });
+    </script>
+</body>
+
+</html>

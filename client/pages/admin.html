@@ -46,16 +46,6 @@
                         </div>
                     </div>
                 </div>
-                <div class="row form-group v-large-bottom">
-                    <div class="col-sm-12">
-                        <div class="input-group">
-                            <span class="input-group-addon">
-               <i class="glyphicon glyphicon-globe"></i>
-               </span>
-                            <ux-select options="{{locationSet}}" selected_value="{{selected_value}}" />
-                        </div>
-                    </div>
-                </div>
                 <div class="row form-group v-normal-bottom">
                     <div class="col-sm-12">
                         <button type="button" on-click="submitFeedback" class="button">Login In</button>
@@ -75,21 +65,18 @@
         data: {
             username: '',
             password: '',
-            location: '',
-            alertData: null,
-            locationSet: [{ 'value': 'Aurangabad', text: 'Aurangabad' }, { value: 'Jalna', text: 'Jalna' }, { value: 'Nashik', text: 'Nashik' }]
+            alertData: null
         },
         on: {
             submitFeedback: function(event) {
                 var self = this;
                 var username = this.get('username'),
-                    password = this.get('password'),
-                    location = this.get('selected_value');
+                    password = this.get('password');
                 this.setAlertData();
-                if (username && password && location) {
+                if (username && password) {
                     $.ajax({
                         method: "POST",
-                        data: { username: username, password: password, location: location,admin:1 },
+                        data: { username: username, password: password, admin: 1 },
                         url: "/user/login",
                         success: function(result, model) {
                             sessionStorage.setItem('username', self.get('username'));

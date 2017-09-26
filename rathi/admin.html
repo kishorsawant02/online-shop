@@ -22,6 +22,7 @@
                     <div class="col-sm-12">
                         <div class="input-group">
                             <h1> Rathi Jewelleres </h1>
+                            <h3>Admin Panel</h3>
                         </div>
                     </div>
                 </div>
@@ -75,12 +76,12 @@
                 if (username && password) {
                     $.ajax({
                         method: "POST",
-                        data: { username: username, password: password, admin: 0 },
+                        data: { username: username, password: password, admin: 1 },
                         url: "/user/login",
                         success: function(result, model) {
                             sessionStorage.setItem('username', self.get('username'));
                             self.setAlertData('Login Success !!!!!\n Redirecting .....', 'success');
-                            window.location.href = '/dashboard.html';
+                            window.location.href = '/adminDashboard.html';
                         },
                         error: function(response) {
                             var error = response.responseJSON;

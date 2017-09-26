@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rathi</title>
+    <script type="text/javascript" src="/js/jQuery.min.js"></script>
+    <script type="text/javascript" src="/js/bootstrap.js"></script>
+    <script type="text/javascript" src="/js/bundle.js"></script>
+    <script type="text/javascript" src="/js/loadash.js"></script>
+    <script type="text/javascript" src="/js/datatables.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="/css/bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="/css/main.css">
+    <link rel="stylesheet" type="text/css" href="/css/datatables.min.css" />
+</head>
+
+<body>
+    <div id="target"></div>
+    <script id="template" type="text/ractive">
+        <ux-header></ux-header>
+        <div class="container v-normal-bottom">
+            <div class="v-normal row">
+                <span class="col-sm-3"><h1>Admin Panel </h1></span>
+                <span class="col-sm-9">
+                <a type="button" href="/addProduct.html" data-toggle="tooltip" title="Product Add" class="v-small-right button v-normal pull-right">Product <span class="glyphicon glyphicon-plus-sign" aria-hidden="true"></span>
+                </a>
+                <a type="button" href="/userMgmtPanel.html"  data-toggle="tooltip" title="User Management!" style="min-width: unset;" class="button v-small-right  v-normal pull-right"><span class="glyphicon glyphicon-user" aria-hidden="true"></span>
+                </a>
+                 <a type="button" href="/orderPanel.html"  data-toggle="tooltip" title="Order Management!" style="min-width: unset;" class="button v-small-right  v-normal pull-right"><span class="glyphicon glyphicon-list-alt" aria-hidden="true"></span>
+                </a>
+                <a type="button" href="/costingPanel.html"  data-toggle="tooltip" title="Cost Update Panel!" style="min-width: unset;" class="button v-small-right  v-normal pull-right"><span class="glyphicon glyphicon-usd" aria-hidden="true"></span>
+                </a>
+                <a type="button" href="/feedbackPanel.html" data-toggle="tooltip" title="FeedBack Panel" style="min-width: unset;" class="button v-small-right  v-normal pull-right"><span class="glyphicon glyphicon-comment" aria-hidden="true"></span>
+                </a>
+                <a type="button" href="/advertisementPanel.html" data-toggle="tooltip" title="Advertisement Panel" style="min-width: unset;" class="button v-small-right  v-normal pull-right"><span class="glyphicon glyphicon-film" aria-hidden="true"></span>
+                </a>
+                <a type="button" href="/catalogPanel.html" style="min-width: unset;" data-toggle="tooltip" title="Catalog Panel" class="button v-small-right  v-normal pull-right"> <span class="glyphicon glyphicon-th-list" aria-hidden="true"></span>
+                </a>
+                <a type="button" href="/dashboard.html" data-toggle="tooltip" title="DashBoard Page"  class="button-icon v-small-right  v-normal v-normal-right pull-right"><span class="glyphicon glyphicon-home" aria-hidden="true"></span>
+                </a>
+                </span>
+            </div>
+            <div class="v-normal">
+                <ux-alert class="v-normal" alertData="{{alertData}}"></ux-alert>
+            </div>
+        </div>
+        <div class="container p-normal-top p-normal-bottom {{#if view === 'orders'}}hide {{/if}}">
+            <table id="products" class="display" cellspacing="0" width="100%">
+                <thead>
+                    <tr>
+                        {{#each productColumn}}
+                        <th class="{{#if ((.).toUpperCase() == 'LASTUPDATE') ||((.).toUpperCase() =='SPECIFICATION') || ((.).toUpperCase() == 'IMAGES') || ((.).toUpperCase() == 'ICON_IMG')}} hide {{/if}}">
+                            {{(.).toUpperCase()}}
+                        </th>
+                        {{/each}}
+                        <th><span class="glyphicon glyphicon-cog" aria-hidden="true"></span></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {{#each products}}
+                    <tr>
+                        <td>{{id}}</td>
+                        <td>{{name}}</td>
+                        <td>{{price}}</td>
+                        <td>{{category}}</td>
+                        <td>{{material}}</td>
+                        <td class="hide">{{specification}}</td>
+                        <td class="hide">{{icon_img}}</td>
+                        <td class="hide">{{images}}</td>
+                        <td>{{description}}</td>
+                        <td>{{weight}}</td>
+                        <td>{{type}}</td>
+                        <td class="hide">{{lastupdate}}</td>
+                        <td style="width: 12%;" align="center">
+                            <span> <button type="button" on-click="deleteSpecification" index="{{id}}" class="btn btn-danger"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></button>
+                            </span>
+                            <span><button type="button" on-click="editSpecification"  index="{{id}}" class="btn btn-success"><span class="glyphicon glyphicon-pencil" aria-hidden="true"></span></button>
+                            </span>
+                        </td>
+                    </tr>
+                    {{/each}}
+                </tbody>
+            </table>
+        </div>
+        <ux-footer style="{{#if products.length < 2}} position: absolute; {{/if}}"></ux-footer>
+        <ux-login type="{{false}}"></ux-login>
+    </script>
+    <script type="text/javascript">
+    Ractive({
+        target: '#target',
+        template: '#template',
+        data: {
+            products: [],
+            alertData: null
+        },
+        on: {
+            init: function() {
+                var self = this;
+                $.ajax({
+                    method: "GET",
+                    url: "/product/",
+                    success: function(result, model) {
+                        if (result.length > 0) {
+                            var column = Object.keys(result[0]);
+                            self.set('productColumn', column);
+                            self.set('products', result);
+                            $('#products').DataTable();
+                            $('#products')
+                                .removeClass('display')
+                                .addClass('table table-striped table-bordered');
+                        }
+                    },
+                    error: function(response) {
+                        var error = response.responseJSON;
+                        self.setAlertData(error.message + error.description, 'danger');
+                    }
+                });
+            },
+            editSpecification: function(event) {
+                sessionStorage.setItem('id', event.get('id'));
+                window.location.href = '/rathi/editProduct.html'
+            },
+            deleteSpecification: function(event) {
+                var self = this;
+                var selectedProduct = event.get();
+                $.ajax({
+                    method: "DELETE",
+                    url: "/product/delete/" + selectedProduct.id,
+                    success: function(result, model) {
+                        var products = self.get('products');
+                        self.set('products', _.without(products, selectedProduct));
+                        self.setAlertData('<b>Item Deleted : ' + selectedProduct.id + '</b>', 'success');
+                    },
+                    error: function(response) {
+                        var error = response.responseJSON;
+                        self.setAlertData(error.message + error.description, 'danger');
+                    }
+                });
+            }
+        },
+        setAlertData: function(msg, type) {
+            this.set('alertData.msg', msg);
+            this.set('alertData.type', type);
+        }
+    });
+    </script>
+</body>
+
+</html>
